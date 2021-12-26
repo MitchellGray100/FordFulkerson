@@ -1,13 +1,13 @@
 package model;
 
-import java.util.HashSet;
+import java.util.Hashtable;
 
 public class Node {
 	int num;
-	HashSet<Edge> edges;
+	Hashtable<Node, Edge> edges;
 
 	public Node(int num) {
 		this.num = num;
-		edges = new HashSet<Edge>();
+		edges = new Hashtable<Node, Edge>();
 	}
 }
