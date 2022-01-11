@@ -69,21 +69,21 @@ public class MaxFlowTests {
 		graph.addNode();
 		graph.addNode();
 		graph.addNode();
-		graph.addEdge(0, 2, 10);//
-		graph.addEdge(2, 3, 4);//
-		graph.addEdge(2, 5, 9);//
-		graph.addEdge(5, 1, 10);//
-		graph.addEdge(5, 6, 15);//
-		graph.addEdge(2, 6, 15);//
-		graph.addEdge(6, 1, 10);//
-		graph.addEdge(6, 7, 15);//
-		graph.addEdge(0, 3, 5);//
-		graph.addEdge(3, 4, 4);//
-		graph.addEdge(3, 6, 8);//
-		graph.addEdge(0, 4, 15);//
-		graph.addEdge(4, 7, 16);//
-		graph.addEdge(7, 3, 6);//
-		graph.addEdge(7, 1, 10);//
+		graph.addEdge(0, 2, 10);
+		graph.addEdge(2, 3, 4);
+		graph.addEdge(2, 5, 9);
+		graph.addEdge(5, 1, 10);
+		graph.addEdge(5, 6, 15);
+		graph.addEdge(2, 6, 15);
+		graph.addEdge(6, 1, 10);
+		graph.addEdge(6, 7, 15);
+		graph.addEdge(0, 3, 5);
+		graph.addEdge(3, 4, 4);
+		graph.addEdge(3, 6, 8);
+		graph.addEdge(0, 4, 15);
+		graph.addEdge(4, 7, 16);
+		graph.addEdge(7, 3, 6);
+		graph.addEdge(7, 1, 10);
 		assertEquals(28, graph.maxFlow());
 	}
 
