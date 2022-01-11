@@ -245,7 +245,6 @@ public class Main extends Application {
 		}
 	}
 
-	// @TODO
 	private void collision(Button button) {
 		int holder = nodes.size();
 		for (int i = 0; i < holder; i++) {
@@ -282,7 +281,7 @@ public class Main extends Application {
 				}
 			}
 		}
-	}// @TODO
+	}
 
 	private void collision(TextFlow text) {
 		int holder = nodes.size();
