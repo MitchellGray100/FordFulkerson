@@ -3,6 +3,7 @@ package application;
 import java.util.ArrayList;
 
 import controller.ControllerImpl;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -29,7 +30,11 @@ public class Main extends Application {
 	private double mouseY = 0;
 	private Cursor tempCursor;
 	private ArrayList<CircleNode> nodes = new ArrayList<CircleNode>();
-	ControllerImpl controller = new ControllerImpl();
+	private Button mouseButton = new Button("Mouse");
+	private Button addNodeButton = new Button("Add Node");
+	private Button removeNodeButton = new Button("Remove Node");
+	private Button maxFlowButton = new Button("Max Flow");
+	private ControllerImpl controller = new ControllerImpl();
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -62,11 +67,6 @@ public class Main extends Application {
 			scroll.vbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.ALWAYS);
 			scroll.setPannable(false);
 			scroll.setContent(root);
-
-			Button mouseButton = new Button("Mouse");
-			Button addNodeButton = new Button("Add Node");
-			Button removeNodeButton = new Button("Remove Node");
-			Button maxFlowButton = new Button("Max Flow");
 
 			mouseButton.getStyleClass().add("toolButton");
 			addNodeButton.getStyleClass().add("toolButton");
@@ -214,6 +214,15 @@ public class Main extends Application {
 					System.out.println("ADded: " + controller.getCurrentNode());
 				}
 			});
+			AnimationTimer animationTimer = new AnimationTimer() {
+				@Override
+				public void handle(long now) {
+
+					update();
+
+				}
+			};
+			animationTimer.start();
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -221,6 +230,96 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 
+	}
+
+	private void update() {
+		int holder = nodes.size();
+		for (int i = 0; i < holder; i++) {
+			if (holder <= nodes.size()) {
+				collision(addNodeButton);
+				collision(removeNodeButton);
+				collision(mouseButton);
+				collision(maxFlowButton);
+				collision(information);
+			}
+		}
+	}
+
+	// @TODO
+	private void collision(Button button) {
+		int holder = nodes.size();
+		for (int i = 0; i < holder; i++) {
+			if (holder <= nodes.size()) {
+				if (nodes.get(i).getBoundsInParent().intersects(button.getBoundsInParent())) {
+					root.getChildren().remove(nodes.get(i));
+					nodes.get(i).getChildren().removeAll(nodes.get(i).circle, nodes.get(i).numText);
+					nodes.get(i).dead = true;
+					controller.removeNode(nodes.get(i).numVar + 1);
+					nodes.remove(nodes.get(i));
+					for (int j = 0; j < nodes.size(); j++) {
+						if (nodes.get(i).numVar < nodes.get(j).numVar) {
+							System.out.print("num before subtraction" + nodes.get(j).numVar + " ");
+							nodes.get(j).numVar--;
+							System.out.println("num after subtraction" + nodes.get(j).numVar);
+
+							if (nodes.get(j).numVar == -1) {
+								nodes.get(j).numText.setText("s");
+							} else if (nodes.get(j).numVar == 0) {
+								nodes.get(j).numText.setText("t");
+							} else {
+								nodes.get(j).numText.setText(((Integer) nodes.get(j).numVar).toString());
+							}
+						}
+					}
+//				root.getChildren().remove(this);
+////				setTranslateX(10000);
+////				setTranslateY(10000);
+//				getChildren().removeAll(circle, numText);
+//				dead = true;
+//				controller.removeNode(numVar + 1);
+//				nodes.remove(this);
+//				System.out.println("REMOVED: " + numVar);
+				}
+			}
+		}
+	}// @TODO
+
+	private void collision(TextFlow text) {
+		int holder = nodes.size();
+		for (int i = 0; i < holder; i++) {
+			if (holder <= nodes.size()) {
+				if (nodes.get(i).getBoundsInParent().intersects(text.getBoundsInParent())) {
+					root.getChildren().remove(nodes.get(i));
+					nodes.get(i).getChildren().removeAll(nodes.get(i).circle, nodes.get(i).numText);
+					nodes.get(i).dead = true;
+					controller.removeNode(nodes.get(i).numVar + 1);
+					nodes.remove(nodes.get(i));
+					for (int j = 0; j < nodes.size(); j++) {
+						if (nodes.get(i).numVar < nodes.get(j).numVar) {
+							System.out.print("num before subtraction" + nodes.get(j).numVar + " ");
+							nodes.get(j).numVar--;
+							System.out.println("num after subtraction" + nodes.get(j).numVar);
+
+							if (nodes.get(j).numVar == -1) {
+								nodes.get(j).numText.setText("s");
+							} else if (nodes.get(j).numVar == 0) {
+								nodes.get(j).numText.setText("t");
+							} else {
+								nodes.get(j).numText.setText(((Integer) nodes.get(j).numVar).toString());
+							}
+						}
+					}
+//				root.getChildren().remove(this);
+////				setTranslateX(10000);
+////				setTranslateY(10000);
+//				getChildren().removeAll(circle, numText);
+//				dead = true;
+//				controller.removeNode(numVar + 1);
+//				nodes.remove(this);
+//				System.out.println("REMOVED: " + numVar);
+				}
+			}
+		}
 	}
 
 	private class CircleNode extends StackPane {
