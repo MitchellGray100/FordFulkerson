@@ -106,6 +106,7 @@ public class Graph {
 		// Augment the flow while there is path from source
 		// to sink
 		while (bfs(path)) {
+			System.out.println("Found Path");
 			// Find minimum residual capacity of the edhes
 			// along the path filled by BFS. Or we can say
 			// find the maximum flow through the path found.
@@ -132,7 +133,12 @@ public class Graph {
 			// Add path flow to overall flow
 			max_flow += path_flow;
 		}
+		for (Node node : graph) {
+			for (Node edgeNode : node.edges.keySet()) {
+				node.edges.get(edgeNode).flow = 0;
+			}
 
+		}
 		// Return the overall flow
 		return max_flow;
 	}

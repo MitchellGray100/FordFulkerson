@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import controller.ControllerImpl;
 import javafx.animation.AnimationTimer;
@@ -268,8 +269,11 @@ public class Main extends Application {
 				information.getChildren().remove(removeNodeText);
 				information.getChildren().remove(addEdgeText);
 				information.getChildren().remove(removeEdgeText);
+//				controller.maxFlow();
+				Random rand = new Random();
 				if (!information.getChildren().contains(maxFlowText)) {
-					maxFlowText.setText("Max Flow: " + ((Integer) controller.maxFlow()).toString());
+//					maxFlowText.setText("Max Flow: " + ((Integer) rand.nextInt()).toString());
+					maxFlowText.setText("Max Flow: " + ((Integer) controller.maxFlow()));
 					maxFlowText.setFont(new Font(32));
 					information.getChildren().add(maxFlowText);
 				}
@@ -351,7 +355,7 @@ public class Main extends Application {
 			scroll.setOnMouseMoved(event -> {
 				mouseX = event.getX();
 				mouseY = event.getY();
-				System.out.println("sMouseX = " + mouseX + " MouseY = " + mouseY);
+				System.out.println("MouseX = " + mouseX + " MouseY = " + mouseY);
 			});
 			scroll.setOnMouseClicked(event -> {
 				if (addState) {
@@ -381,18 +385,14 @@ public class Main extends Application {
 	}
 
 	private void update() {
-		int holder = nodes.size();
-		for (int i = 0; i < holder; i++) {
-			if (holder <= nodes.size()) {
-				collision(addNodeButton);
-				collision(removeNodeButton);
-				collision(addEdgeButton);
-				collision(removeEdgeButton);
-				collision(mouseButton);
-				collision(maxFlowButton);
-				collision(information);
-			}
-		}
+
+		collision(addNodeButton);
+		collision(removeNodeButton);
+		collision(addEdgeButton);
+		collision(removeEdgeButton);
+		collision(mouseButton);
+		collision(maxFlowButton);
+		collision(information);
 
 		checkEdges();
 	}
@@ -415,8 +415,9 @@ public class Main extends Application {
 		for (int i = 0; i < holder; i++) {
 			if (holder <= nodes.size()) {
 				if (nodes.get(i).getBoundsInParent().intersects(button.getBoundsInParent())) {
+					System.out.println("COLLISION ERROR");
 					root.getChildren().remove(nodes.get(i));
-					nodes.get(i).getChildren().removeAll(nodes.get(i).circle, nodes.get(i).numText);
+//					nodes.get(i).getChildren().removeAll(nodes.get(i).circle, nodes.get(i).numText);
 					nodes.get(i).dead = true;
 					controller.removeNode(nodes.get(i).numVar + 1);
 					nodes.remove(nodes.get(i));
@@ -435,14 +436,6 @@ public class Main extends Application {
 							}
 						}
 					}
-//				root.getChildren().remove(this);
-////				setTranslateX(10000);
-////				setTranslateY(10000);
-//				getChildren().removeAll(circle, numText);
-//				dead = true;
-//				controller.removeNode(numVar + 1);
-//				nodes.remove(this);
-//				System.out.println("REMOVED: " + numVar);
 				}
 			}
 		}
@@ -604,6 +597,27 @@ public class Main extends Application {
 						this.getStyleClass().add("selectedNode");
 
 					}
+					if (removeEdgeState) {
+						if (edgeOne == null) {
+							edgeOne = this;
+						} else if (edgeTwo == null) {
+							edgeTwo = this;
+							boolean has = false;
+							for (int i = 0; i < edges.size(); i++) {
+								if ((edges.get(i).edge1.numVar == edgeOne.numVar
+										&& edges.get(i).edge2.numVar == edgeTwo.numVar)) {
+									edges.remove(i);
+									break;
+								}
+							}
+
+						} else {
+							removeSelectedNodes();
+							edgeTwo = null;
+							edgeOne = this;
+						}
+						this.getStyleClass().add("selectedNode");
+					}
 				}
 			});
 			numText.setOnMouseEntered(event -> {
@@ -689,6 +703,28 @@ public class Main extends Application {
 								EdgeLine temp = new EdgeLine(edgeOne, edgeTwo);
 								controller.addEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1, 5);
 								edges.add(temp);
+							}
+
+						} else {
+							removeSelectedNodes();
+							edgeTwo = null;
+							edgeOne = this;
+						}
+						this.getStyleClass().add("selectedNode");
+					}
+
+					if (removeEdgeState) {
+						if (edgeOne == null) {
+							edgeOne = this;
+						} else if (edgeTwo == null) {
+							edgeTwo = this;
+							boolean has = false;
+							for (int i = 0; i < edges.size(); i++) {
+								if ((edges.get(i).edge1.numVar == edgeOne.numVar
+										&& edges.get(i).edge2.numVar == edgeTwo.numVar)) {
+									edges.remove(i);
+									break;
+								}
 							}
 
 						} else {
