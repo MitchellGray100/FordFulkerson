@@ -607,6 +607,7 @@ public class Main extends Application {
 								if ((edges.get(i).edge1.numVar == edgeOne.numVar
 										&& edges.get(i).edge2.numVar == edgeTwo.numVar)) {
 									edges.remove(i);
+									controller.removeEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1);
 									break;
 								}
 							}
@@ -722,6 +723,7 @@ public class Main extends Application {
 							for (int i = 0; i < edges.size(); i++) {
 								if ((edges.get(i).edge1.numVar == edgeOne.numVar
 										&& edges.get(i).edge2.numVar == edgeTwo.numVar)) {
+									controller.removeEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1);
 									edges.remove(i);
 									break;
 								}
