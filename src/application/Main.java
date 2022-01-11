@@ -70,7 +70,7 @@ public class Main extends Application {
 			root.add(information, 0, 2, 1, 1);
 			root.add(canvas, 0, 10, 10, 10);
 
-			Scene scene = new Scene(scroll, 1080, 720);
+			Scene scene = new Scene(scroll, 1440, 720);
 
 			mouseButton.setOnMouseClicked(event -> {
 				information.getChildren().remove(addNodeText);
@@ -126,6 +126,26 @@ public class Main extends Application {
 				scene.setCursor(Cursor.CROSSHAIR);
 				mouseButton.getStyleClass().remove("clickedToolButton");
 				addNodeButton.getStyleClass().remove("clickedToolButton");
+			});
+
+			maxFlowButton.setOnMouseClicked(event -> {
+				information.getChildren().remove(mouseText);
+				information.getChildren().remove(addNodeText);
+				information.getChildren().remove(removeNodeText);
+				if (!information.getChildren().contains(introText)) {
+					information.getChildren().add(introText);
+				}
+
+				mouseState = false;
+				addState = false;
+				removeState = false;
+//				if (!removeNodeButton.getStyleClass().contains("clickedToolButton")) {
+//					removeNodeButton.getStyleClass().add("clickedToolButton");
+//				}
+				scene.setCursor(Cursor.DEFAULT);
+				mouseButton.getStyleClass().remove("clickedToolButton");
+				addNodeButton.getStyleClass().remove("clickedToolButton");
+				removeNodeButton.getStyleClass().remove("clickedToolButton");
 			});
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
