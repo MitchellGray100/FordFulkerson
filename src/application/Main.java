@@ -1,5 +1,6 @@
 package application;
 
+import controller.ControllerImpl;
 import javafx.application.Application;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -21,6 +22,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+
+			ControllerImpl controller = new ControllerImpl();
 
 			Text introText = new Text("Click a button or node to get started");
 			Text mouseText = new Text("Click a Node to view its info");
@@ -53,14 +56,17 @@ public class Main extends Application {
 			Button mouseButton = new Button("Mouse");
 			Button addNodeButton = new Button("Add Node");
 			Button removeNodeButton = new Button("Remove Node");
+			Button maxFlowButton = new Button("Max Flow");
 
 			mouseButton.getStyleClass().add("toolButton");
 			addNodeButton.getStyleClass().add("toolButton");
 			removeNodeButton.getStyleClass().add("toolButton");
+			maxFlowButton.getStyleClass().add("toolButton");
 
 			root.add(mouseButton, 1, 0, 5, 3);
 			root.add(addNodeButton, 6, 0, 5, 3);
 			root.add(removeNodeButton, 11, 0, 5, 3);
+			root.add(maxFlowButton, 16, 0, 5, 3);
 			root.add(information, 0, 2, 1, 1);
 			root.add(canvas, 0, 10, 10, 10);
 
