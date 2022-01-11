@@ -8,7 +8,6 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
@@ -75,8 +74,6 @@ public class Main extends Application {
 			root.setHgap(20);
 			root.getStyleClass().add("background");
 
-			Canvas canvas = new Canvas(200, 200);
-
 			scroll.getStyleClass().add("background");
 			scroll.fitToWidthProperty().set(true);
 			scroll.fitToHeightProperty().set(true);
@@ -100,7 +97,6 @@ public class Main extends Application {
 			root.add(removeEdgeButton, 21, 0, 5, 3);
 			root.add(maxFlowButton, 26, 0, 5, 3);
 			root.add(information, 0, 2, 1, 1);
-			root.add(canvas, 0, 10, 10, 10);
 
 			scene = new Scene(scroll, 1920, 1080);
 
@@ -362,7 +358,7 @@ public class Main extends Application {
 					CircleNode circle = new CircleNode(controller.getCurrentNode());
 					nodes.add(circle);
 					controller.addNode();
-					root.getChildren().add(circle);
+					root.add(circle, 0, 0);
 					System.out.println("ADded: " + controller.getCurrentNode());
 				}
 			});
@@ -586,6 +582,7 @@ public class Main extends Application {
 							if (!has) {
 								EdgeLine temp = new EdgeLine(edgeOne, edgeTwo);
 								controller.addEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1, 5);
+								// ADD EDGE HERE TODO
 								edges.add(temp);
 							}
 
@@ -780,16 +777,30 @@ public class Main extends Application {
 		Line line = new Line();
 
 		public EdgeLine(CircleNode firstEdge, CircleNode secondEdge) {
-			this.autosize();
+			line.setStrokeWidth(3);
+//
+//			setTranslateX(mouseX - 152);
+//			setTranslateY(mouseY - 30);
+			line.setTranslateX(firstEdge.circle.getLayoutX() * 1.5 + firstEdge.getTranslateX());
+			line.setTranslateY(firstEdge.circle.getLayoutY() + firstEdge.getTranslateY());
 			edge1 = firstEdge;
 			edge2 = secondEdge;
 			controller.addEdge(edge1.numVar + 1, edge2.numVar + 1, 5);
-			setTranslateX(edge1.getTranslateX());
-			setTranslateY(edge1.getTranslateY());
-			setRotate(0);
+
+//			line.setStartX(edge1.getTranslateX());
+//			line.setStartX(edge1.getTranslateY());
+//			line.setEndX(edge2.getTranslateX());
+//			line.setEndY(edge2.getTranslateY());
+
+			line.setStartX(firstEdge.getTranslateX() + 152);
+			line.setStartY(firstEdge.getTranslateY() + 30);
+			line.setEndX(secondEdge.getTranslateX() + 152);
+			line.setEndY(secondEdge.getTranslateY() + 30);
 			line.setFill(Color.BLACK);
 
 			getChildren().addAll(line);
+			root.add(line, 0, 0);
+//			root.getChildren().add(this);
 
 		}
 	}
