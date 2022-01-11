@@ -1,5 +1,8 @@
 package controller;
 
+import java.util.Hashtable;
+
+import model.Edge;
 import model.Graph;
 import model.Node;
 
@@ -28,6 +31,14 @@ public class ControllerImpl {
 
 	public int getCurrentNode() {
 		return graph.getCurrentNode();
+	}
+
+	public Hashtable<Node, Edge> getEdgesOFNode(int index) {
+		return graph.getEdgesOfNode(index);
+	}
+
+	public int getCapacityOfEdge(int num1, int num2) {
+		return graph.getCapacityOfEdge(num1, num2);
 	}
 
 	public int maxFlow() {

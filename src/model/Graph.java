@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.LinkedList;
 
 public class Graph {
@@ -138,5 +139,13 @@ public class Graph {
 
 	public int getCurrentNode() {
 		return currentNode;
+	}
+
+	public Hashtable<Node, Edge> getEdgesOfNode(int index) {
+		return graph.get(index).edges;
+	}
+
+	public int getCapacityOfEdge(int num1, int num2) {
+		return graph.get(num1).edges.get(graph.get(num2)).capacity;
 	}
 }

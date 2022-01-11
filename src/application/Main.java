@@ -103,6 +103,8 @@ public class Main extends Application {
 			Scene scene = new Scene(scroll, 1920, 1080);
 
 			mouseButton.setOnMouseClicked(event -> {
+				edgeOne = null;
+				edgeTwo = null;
 				removeSelectedNodes();
 				information.getChildren().remove(nodeInfoText);
 				information.getChildren().remove(maxFlowText);
@@ -130,6 +132,8 @@ public class Main extends Application {
 			});
 
 			addNodeButton.setOnMouseClicked(event -> {
+				edgeOne = null;
+				edgeTwo = null;
 				removeSelectedNodes();
 				information.getChildren().remove(nodeInfoText);
 				information.getChildren().remove(maxFlowText);
@@ -157,6 +161,8 @@ public class Main extends Application {
 			});
 
 			removeNodeButton.setOnMouseClicked(event -> {
+				edgeOne = null;
+				edgeTwo = null;
 				removeSelectedNodes();
 				information.getChildren().remove(nodeInfoText);
 				information.getChildren().remove(maxFlowText);
@@ -183,6 +189,8 @@ public class Main extends Application {
 			});
 
 			addEdgeButton.setOnMouseClicked(event -> {
+				edgeOne = null;
+				edgeTwo = null;
 				removeSelectedNodes();
 				information.getChildren().remove(nodeInfoText);
 				information.getChildren().remove(maxFlowText);
@@ -212,6 +220,8 @@ public class Main extends Application {
 			});
 
 			removeEdgeButton.setOnMouseClicked(event -> {
+				edgeOne = null;
+				edgeTwo = null;
 				removeSelectedNodes();
 				information.getChildren().remove(nodeInfoText);
 				information.getChildren().remove(maxFlowText);
@@ -240,6 +250,8 @@ public class Main extends Application {
 			});
 
 			maxFlowButton.setOnMouseClicked(event -> {
+				edgeOne = null;
+				edgeTwo = null;
 				removeSelectedNodes();
 				information.getChildren().remove(nodeInfoText);
 				information.getChildren().remove(introText);
@@ -396,8 +408,12 @@ public class Main extends Application {
 	private void drawConnectingLine() {
 		// TODO Auto-generated method stub
 		// Draws Line connecting the Circles
-		EdgeLine temp = new EdgeLine(edgeOne, edgeTwo);
-		edges.add(temp);
+		if (addEdgeState) {
+			if (!edges.contains(new EdgeLine(edgeOne, edgeTwo))) {
+				EdgeLine temp = new EdgeLine(edgeOne, edgeTwo);
+				edges.add(temp);
+			}
+		}
 
 	}
 
@@ -505,14 +521,10 @@ public class Main extends Application {
 			setOnMouseReleased(event -> {
 				if (!dead) {
 					if (mouseState) {
-						information.getChildren().clear();
-						nodeInfoText = new Text();
-						nodeInfoText.setFont(new Font(32));
-						nodeInfoText.setText("Node " + numText.getText() + "\n");
+
 						removeSelectedNodes();
 						this.getStyleClass().add("selectedNode");
 //						nodeInfoText
-						information.getChildren().add(nodeInfoText);
 					}
 					if (removeState) {
 						root.getChildren().remove(this);
@@ -523,6 +535,14 @@ public class Main extends Application {
 						controller.removeNode(numVar + 1);
 						nodes.remove(this);
 						System.out.println("REMOVED: " + numVar);
+						int holder = edges.size();
+						for (int i = 0; i < holder; i++) {
+							if (edges.get(i).edge1.numText.equals(numText)) {
+								edges.remove(edges.get(i));
+								i--;
+								holder--;
+							}
+						}
 						for (int i = 0; i < nodes.size(); i++) {
 							if (numVar < nodes.get(i).numVar) {
 								System.out.print("num before subtraction" + nodes.get(i).numVar + " ");
@@ -541,6 +561,24 @@ public class Main extends Application {
 					}
 
 					if (addEdgeState) {
+						this.getStyleClass().add("selectedNode");
+						information.getChildren().clear();
+						nodeInfoText = new Text();
+						nodeInfoText.setFont(new Font(32));
+						String controllerInfo = "Node " + numText.getText() + "\n";
+						controllerInfo += "Edges: \n";
+//						Hashtable<Node, Edge> edges = controller.getEdgesOFNode(numVar + 1);
+
+						for (int i = 0; i < edges.size(); i++) {
+							if (edges.get(i).edge1.numText.equals(numText)) {
+								controllerInfo += edges.get(i).edge2.numText.getText() + " ";
+								controllerInfo += controller.getCapacityOfEdge(edges.get(i).edge1.numVar + 1,
+										edges.get(i).edge2.numVar + 1) + "\n";
+							}
+						}
+
+						nodeInfoText.setText(controllerInfo);
+						information.getChildren().add(nodeInfoText);
 						if (edgeOne == null) {
 							edgeOne = this;
 						} else if (edgeTwo == null) {
@@ -596,11 +634,13 @@ public class Main extends Application {
 
 		public EdgeLine(CircleNode firstEdge, CircleNode secondEdge) {
 			this.autosize();
-
-			setTranslateX(mouseX - 152);
-			setTranslateY(mouseY - 30);
-
-			line.setFill(Color.ORANGE);
+			edge1 = firstEdge;
+			edge2 = secondEdge;
+			controller.addEdge(edge1.numVar + 1, edge2.numVar + 1, 5);
+			setTranslateX(edge1.getTranslateX());
+			setTranslateY(edge1.getTranslateY());
+			setRotate(0);
+			line.setFill(Color.BLACK);
 
 			getChildren().addAll(line);
 
