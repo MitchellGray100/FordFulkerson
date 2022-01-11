@@ -18,6 +18,7 @@ public class Main extends Application {
 	private boolean mouseState = false;
 	private boolean addState = false;
 	private boolean removeState = false;
+	private Cursor tempCursor;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -62,6 +63,7 @@ public class Main extends Application {
 			addNodeButton.getStyleClass().add("toolButton");
 			removeNodeButton.getStyleClass().add("toolButton");
 			maxFlowButton.getStyleClass().add("toolButton");
+			maxFlowButton.setId("maxFlow");
 
 			root.add(mouseButton, 1, 0, 5, 3);
 			root.add(addNodeButton, 6, 0, 5, 3);
@@ -89,6 +91,7 @@ public class Main extends Application {
 				addNodeButton.getStyleClass().remove("clickedToolButton");
 				removeNodeButton.getStyleClass().remove("clickedToolButton");
 				scene.setCursor(Cursor.DEFAULT);
+				tempCursor = scene.getCursor();
 			});
 
 			addNodeButton.setOnMouseClicked(event -> {
@@ -106,6 +109,7 @@ public class Main extends Application {
 					addNodeButton.getStyleClass().add("clickedToolButton");
 				}
 				scene.setCursor(Cursor.CROSSHAIR);
+				tempCursor = scene.getCursor();
 				mouseButton.getStyleClass().remove("clickedToolButton");
 				removeNodeButton.getStyleClass().remove("clickedToolButton");
 			});
@@ -124,6 +128,7 @@ public class Main extends Application {
 					removeNodeButton.getStyleClass().add("clickedToolButton");
 				}
 				scene.setCursor(Cursor.CROSSHAIR);
+				tempCursor = scene.getCursor();
 				mouseButton.getStyleClass().remove("clickedToolButton");
 				addNodeButton.getStyleClass().remove("clickedToolButton");
 			});
@@ -142,10 +147,48 @@ public class Main extends Application {
 //				if (!removeNodeButton.getStyleClass().contains("clickedToolButton")) {
 //					removeNodeButton.getStyleClass().add("clickedToolButton");
 //				}
-				scene.setCursor(Cursor.DEFAULT);
+				scene.setCursor(Cursor.HAND);
 				mouseButton.getStyleClass().remove("clickedToolButton");
 				addNodeButton.getStyleClass().remove("clickedToolButton");
 				removeNodeButton.getStyleClass().remove("clickedToolButton");
+			});
+
+			mouseButton.setOnMouseEntered(event -> {
+				if (!mouseButton.getStyleClass().contains("clickedToolButton")) {
+					tempCursor = scene.getCursor();
+					scene.setCursor(Cursor.HAND);
+				}
+			});
+			mouseButton.setOnMouseExited(event -> {
+				scene.setCursor(tempCursor);
+			});
+			removeNodeButton.setOnMouseEntered(event -> {
+				if (!removeNodeButton.getStyleClass().contains("clickedToolButton")) {
+					tempCursor = scene.getCursor();
+					scene.setCursor(Cursor.HAND);
+				}
+			});
+			removeNodeButton.setOnMouseExited(event -> {
+				scene.setCursor(tempCursor);
+			});
+
+			addNodeButton.setOnMouseEntered(event -> {
+				if (!addNodeButton.getStyleClass().contains("clickedToolButton")) {
+					tempCursor = scene.getCursor();
+					scene.setCursor(Cursor.HAND);
+				}
+			});
+			addNodeButton.setOnMouseExited(event -> {
+				scene.setCursor(tempCursor);
+			});
+
+			maxFlowButton.setOnMouseEntered(event -> {
+				tempCursor = scene.getCursor();
+				scene.setCursor(Cursor.HAND);
+			});
+
+			maxFlowButton.setOnMouseExited(event -> {
+				scene.setCursor(tempCursor);
 			});
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
@@ -154,9 +197,6 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 
-	}
-
-	public void setInfoText() {
 	}
 
 	public static void main(String[] args) {

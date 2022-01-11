@@ -1,11 +1,12 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 .background{
-	-fx-background-color: white;
+	-fx-background-color: darkgray;
 }
 .toolButton{
-	-fx-background-color: darkgray;
+	/* -fx-background-color: darkgray; */
 	-fx-text-fill: black;
-	-fx-effect: dropshadow( one-pass-box , black , 8 , 0.0 , 2 , 0 );
+	-fx-effect: dropshadow( one-pass-box , orange , 8 , 0.0 , 2 , 0 );
+	-fx-focus-color: orange;
 	-fx-font-size: 32;
 	-fx-font-style: normal;
 	-fx-font-weight: bold;
@@ -13,9 +14,17 @@
 }
 
 .clickedToolButton{
-	-fx-background-color: yellow;
+	-fx-background-color: orange;
 }
 
 .textBubble{
-	-fx-background-color: darkgray;
+	-fx-background-color: silver;
+	-fx-border-color: orange;
+}
+
+#maxFlow{
+	-fx-text-fill: white;
+	
+	-fx-focus-color: blue;
+	-fx-background-color: orange;
 }
