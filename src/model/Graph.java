@@ -10,9 +10,13 @@ public class Graph {
 
 	public Graph() {
 		graph = new ArrayList<Node>();
-		graph.add(new Node(0));
-		graph.add(new Node(1));
+		graph.add(new Node(0));// source
+		graph.add(new Node(1));// sink
 		currentNode = 1;
+	}
+
+	public Node getNode(int index) {
+		return graph.get(index);
 	}
 
 	public void addNode() {
@@ -26,8 +30,8 @@ public class Graph {
 		reMap();
 	}
 
-	public void addEdge(int numOne, int numTwo) {
-		graph.get(numOne).edges.put(graph.get(numTwo), new Edge(graph.get(numTwo)));
+	public void addEdge(int numOne, int numTwo, int capacity) {
+		graph.get(numOne).edges.put(graph.get(numTwo), new Edge(graph.get(numTwo), capacity));
 	}
 
 	public void removeEdge(int numOne, int numTwo) {
@@ -42,7 +46,9 @@ public class Graph {
 
 	public boolean bfs(int[] path) {
 		boolean visited[] = new boolean[graph.size()];
-
+		for (boolean bool : visited) {
+			bool = false;
+		}
 		LinkedList<Integer> queue = new LinkedList<Integer>();
 		queue.add(0);
 		visited[0] = true;
@@ -52,19 +58,25 @@ public class Graph {
 			int u = queue.poll();
 
 			for (int v = 0; v < graph.size(); v++) {
-				if (visited[v] == false && graph.get(u).edges.contains(graph.get(v))
-						&& graph.get(u).edges.get(graph.get(v)).flow < graph.get(u).edges.get(graph.get(v)).capacity) {
-					// If we find a connection to the sink
-					// node, then there is no point in BFS
-					// anymore We just have to set its parent
-					// and can return true
-					if (v == graph.get(1).num) {
-						path[v] = u;
-						return true;
+				if (visited[v] == false) {
+					if (getNode(u).edges.containsKey(getNode(v))) {
+						{
+							if (graph.get(u).edges.get(graph.get(v)).flow < graph.get(u).edges
+									.get(graph.get(v)).capacity) {
+								// If we find a connection to the sink
+								// node, then there is no point in BFS
+								// anymore We just have to set its parent
+								// and can return true
+								if (v == graph.get(1).num) {
+									path[v] = u;
+									return true;
+								}
+								queue.add(v);
+								path[v] = u;
+								visited[v] = true;
+							}
+						}
 					}
-					queue.add(v);
-					path[v] = u;
-					visited[v] = true;
 				}
 			}
 		}
@@ -86,6 +98,7 @@ public class Graph {
 
 		int max_flow = 0; // There is no flow initially
 
+		path = new int[graph.size()];
 		// Augment the flow while there is path from source
 		// to sink
 		while (bfs(path)) {
