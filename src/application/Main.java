@@ -26,6 +26,8 @@ public class Main extends Application {
 	private boolean mouseState = false;
 	private boolean addState = false;
 	private boolean removeState = false;
+	private boolean addEdgeState = false;
+	private boolean removeEdgeState = false;
 	private double mouseX = 0;
 	private double mouseY = 0;
 	private Cursor tempCursor;
@@ -34,6 +36,8 @@ public class Main extends Application {
 	private Button addNodeButton = new Button("Add Node");
 	private Button removeNodeButton = new Button("Remove Node");
 	private Button maxFlowButton = new Button("Max Flow");
+	private Button addEdgeButton = new Button("Add Edge");
+	private Button removeEdgeButton = new Button("Remove Edge");
 	private ControllerImpl controller = new ControllerImpl();
 
 	@Override
@@ -46,12 +50,16 @@ public class Main extends Application {
 			Text mouseText = new Text("Click a Node to view its info");
 			Text addNodeText = new Text("Click anywhere to add a Node");
 			Text removeNodeText = new Text("Click a Node to remove it");
+			Text addEdgeText = new Text("Click two Nodes to add an Edge");
+			Text removeEdgeText = new Text("Click an Edge to remove it");
 			Text maxFlowText = new Text();
 			;
 			mouseText.setFont(new Font(32));
 			introText.setFont(new Font(32));
 			removeNodeText.setFont(new Font(32));
 			addNodeText.setFont(new Font(32));
+			removeEdgeText.setFont(new Font(32));
+			addEdgeText.setFont(new Font(32));
 			information.getStyleClass().add("textBubble");
 			information.getChildren().add(introText);
 			information.setPrefWidth(300);
@@ -72,23 +80,29 @@ public class Main extends Application {
 			mouseButton.getStyleClass().add("toolButton");
 			addNodeButton.getStyleClass().add("toolButton");
 			removeNodeButton.getStyleClass().add("toolButton");
+			addEdgeButton.getStyleClass().add("toolButton");
+			removeEdgeButton.getStyleClass().add("toolButton");
 			maxFlowButton.getStyleClass().add("toolButton");
 			maxFlowButton.setId("maxFlow");
 
 			root.add(mouseButton, 1, 0, 5, 3);
 			root.add(addNodeButton, 6, 0, 5, 3);
 			root.add(removeNodeButton, 11, 0, 5, 3);
-			root.add(maxFlowButton, 16, 0, 5, 3);
+			root.add(addEdgeButton, 16, 0, 5, 3);
+			root.add(removeEdgeButton, 21, 0, 5, 3);
+			root.add(maxFlowButton, 26, 0, 5, 3);
 			root.add(information, 0, 2, 1, 1);
 			root.add(canvas, 0, 10, 10, 10);
 
-			Scene scene = new Scene(scroll, 1440, 720);
+			Scene scene = new Scene(scroll, 1920, 1080);
 
 			mouseButton.setOnMouseClicked(event -> {
 				information.getChildren().remove(maxFlowText);
 				information.getChildren().remove(addNodeText);
 				information.getChildren().remove(introText);
 				information.getChildren().remove(removeNodeText);
+				information.getChildren().remove(addEdgeText);
+				information.getChildren().remove(removeEdgeText);
 				if (!information.getChildren().contains(mouseText)) {
 
 					information.getChildren().add(mouseText);
@@ -101,6 +115,8 @@ public class Main extends Application {
 				}
 				addNodeButton.getStyleClass().remove("clickedToolButton");
 				removeNodeButton.getStyleClass().remove("clickedToolButton");
+				addEdgeButton.getStyleClass().remove("clickedToolButton");
+				removeEdgeButton.getStyleClass().remove("clickedToolButton");
 				scene.setCursor(Cursor.DEFAULT);
 				tempCursor = scene.getCursor();
 			});
@@ -110,6 +126,8 @@ public class Main extends Application {
 				information.getChildren().remove(mouseText);
 				information.getChildren().remove(introText);
 				information.getChildren().remove(removeNodeText);
+				information.getChildren().remove(addEdgeText);
+				information.getChildren().remove(removeEdgeText);
 				if (!information.getChildren().contains(addNodeText)) {
 
 					information.getChildren().add(addNodeText);
@@ -124,6 +142,8 @@ public class Main extends Application {
 				tempCursor = scene.getCursor();
 				mouseButton.getStyleClass().remove("clickedToolButton");
 				removeNodeButton.getStyleClass().remove("clickedToolButton");
+				addEdgeButton.getStyleClass().remove("clickedToolButton");
+				removeEdgeButton.getStyleClass().remove("clickedToolButton");
 			});
 
 			removeNodeButton.setOnMouseClicked(event -> {
@@ -131,6 +151,8 @@ public class Main extends Application {
 				information.getChildren().remove(mouseText);
 				information.getChildren().remove(addNodeText);
 				information.getChildren().remove(introText);
+				information.getChildren().remove(addEdgeText);
+				information.getChildren().remove(removeEdgeText);
 				if (!information.getChildren().contains(removeNodeText)) {
 					information.getChildren().add(removeNodeText);
 				}
@@ -144,6 +166,57 @@ public class Main extends Application {
 				tempCursor = scene.getCursor();
 				mouseButton.getStyleClass().remove("clickedToolButton");
 				addNodeButton.getStyleClass().remove("clickedToolButton");
+				addEdgeButton.getStyleClass().remove("clickedToolButton");
+				removeEdgeButton.getStyleClass().remove("clickedToolButton");
+			});
+
+			addEdgeButton.setOnMouseClicked(event -> {
+				information.getChildren().remove(maxFlowText);
+				information.getChildren().remove(mouseText);
+				information.getChildren().remove(introText);
+				information.getChildren().remove(removeNodeText);
+				information.getChildren().remove(addNodeText);
+				information.getChildren().remove(removeEdgeText);
+				if (!information.getChildren().contains(addEdgeText)) {
+
+					information.getChildren().add(addEdgeText);
+				}
+				mouseState = false;
+				addState = true;
+				removeState = false;
+				if (!addEdgeButton.getStyleClass().contains("clickedToolButton")) {
+					addEdgeButton.getStyleClass().add("clickedToolButton");
+				}
+				scene.setCursor(Cursor.CROSSHAIR);
+				tempCursor = scene.getCursor();
+				mouseButton.getStyleClass().remove("clickedToolButton");
+				removeNodeButton.getStyleClass().remove("clickedToolButton");
+				removeEdgeButton.getStyleClass().remove("clickedToolButton");
+				addNodeButton.getStyleClass().remove("clickedToolButton");
+			});
+
+			removeEdgeButton.setOnMouseClicked(event -> {
+				information.getChildren().remove(maxFlowText);
+				information.getChildren().remove(mouseText);
+				information.getChildren().remove(addNodeText);
+				information.getChildren().remove(removeNodeText);
+				information.getChildren().remove(introText);
+				information.getChildren().remove(addEdgeText);
+				if (!information.getChildren().contains(removeEdgeText)) {
+					information.getChildren().add(removeEdgeText);
+				}
+				mouseState = false;
+				addState = false;
+				removeState = true;
+				if (!removeEdgeButton.getStyleClass().contains("clickedToolButton")) {
+					removeEdgeButton.getStyleClass().add("clickedToolButton");
+				}
+				scene.setCursor(Cursor.CROSSHAIR);
+				tempCursor = scene.getCursor();
+				mouseButton.getStyleClass().remove("clickedToolButton");
+				addNodeButton.getStyleClass().remove("clickedToolButton");
+				removeNodeButton.getStyleClass().remove("clickedToolButton");
+				addEdgeButton.getStyleClass().remove("clickedToolButton");
 			});
 
 			maxFlowButton.setOnMouseClicked(event -> {
@@ -152,6 +225,8 @@ public class Main extends Application {
 				information.getChildren().remove(mouseText);
 				information.getChildren().remove(addNodeText);
 				information.getChildren().remove(removeNodeText);
+				information.getChildren().remove(addEdgeText);
+				information.getChildren().remove(removeEdgeText);
 				if (!information.getChildren().contains(maxFlowText)) {
 					maxFlowText.setText("Max Flow: " + ((Integer) controller.maxFlow()).toString());
 					maxFlowText.setFont(new Font(32));
@@ -168,6 +243,8 @@ public class Main extends Application {
 				mouseButton.getStyleClass().remove("clickedToolButton");
 				addNodeButton.getStyleClass().remove("clickedToolButton");
 				removeNodeButton.getStyleClass().remove("clickedToolButton");
+				removeEdgeButton.getStyleClass().remove("clickedToolButton");
+				addEdgeButton.getStyleClass().remove("clickedToolButton");
 			});
 
 			mouseButton.setOnMouseEntered(event -> {
@@ -196,6 +273,26 @@ public class Main extends Application {
 				}
 			});
 			addNodeButton.setOnMouseExited(event -> {
+				scene.setCursor(tempCursor);
+			});
+
+			removeEdgeButton.setOnMouseEntered(event -> {
+				if (!removeEdgeButton.getStyleClass().contains("clickedToolButton")) {
+					tempCursor = scene.getCursor();
+					scene.setCursor(Cursor.HAND);
+				}
+			});
+			removeEdgeButton.setOnMouseExited(event -> {
+				scene.setCursor(tempCursor);
+			});
+
+			addEdgeButton.setOnMouseEntered(event -> {
+				if (!addEdgeButton.getStyleClass().contains("clickedToolButton")) {
+					tempCursor = scene.getCursor();
+					scene.setCursor(Cursor.HAND);
+				}
+			});
+			addEdgeButton.setOnMouseExited(event -> {
 				scene.setCursor(tempCursor);
 			});
 
