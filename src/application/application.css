@@ -17,6 +17,9 @@
 	-fx-background-color: orange;
 }
 
+.selectedNode{
+	-fx-effect: dropshadow( one-pass-box , black , 8 , 5 , 2 , 0 );
+}
 .textBubble{
 	-fx-background-color: silver;
 	-fx-border-color: orange;

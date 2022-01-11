@@ -14,6 +14,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -32,6 +33,9 @@ public class Main extends Application {
 	private double mouseY = 0;
 	private Cursor tempCursor;
 	private ArrayList<CircleNode> nodes = new ArrayList<CircleNode>();
+	private ArrayList<EdgeLine> edges = new ArrayList<EdgeLine>();
+	private CircleNode edgeOne;
+	private CircleNode edgeTwo;
 	private Button mouseButton = new Button("Mouse");
 	private Button addNodeButton = new Button("Add Node");
 	private Button removeNodeButton = new Button("Remove Node");
@@ -39,6 +43,7 @@ public class Main extends Application {
 	private Button addEdgeButton = new Button("Add Edge");
 	private Button removeEdgeButton = new Button("Remove Edge");
 	private ControllerImpl controller = new ControllerImpl();
+	private Text nodeInfoText = new Text();
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -60,6 +65,7 @@ public class Main extends Application {
 			addNodeText.setFont(new Font(32));
 			removeEdgeText.setFont(new Font(32));
 			addEdgeText.setFont(new Font(32));
+			nodeInfoText.setFont(new Font(32));
 			information.getStyleClass().add("textBubble");
 			information.getChildren().add(introText);
 			information.setPrefWidth(300);
@@ -97,6 +103,8 @@ public class Main extends Application {
 			Scene scene = new Scene(scroll, 1920, 1080);
 
 			mouseButton.setOnMouseClicked(event -> {
+				removeSelectedNodes();
+				information.getChildren().remove(nodeInfoText);
 				information.getChildren().remove(maxFlowText);
 				information.getChildren().remove(addNodeText);
 				information.getChildren().remove(introText);
@@ -122,6 +130,8 @@ public class Main extends Application {
 			});
 
 			addNodeButton.setOnMouseClicked(event -> {
+				removeSelectedNodes();
+				information.getChildren().remove(nodeInfoText);
 				information.getChildren().remove(maxFlowText);
 				information.getChildren().remove(mouseText);
 				information.getChildren().remove(introText);
@@ -147,6 +157,8 @@ public class Main extends Application {
 			});
 
 			removeNodeButton.setOnMouseClicked(event -> {
+				removeSelectedNodes();
+				information.getChildren().remove(nodeInfoText);
 				information.getChildren().remove(maxFlowText);
 				information.getChildren().remove(mouseText);
 				information.getChildren().remove(addNodeText);
@@ -171,6 +183,8 @@ public class Main extends Application {
 			});
 
 			addEdgeButton.setOnMouseClicked(event -> {
+				removeSelectedNodes();
+				information.getChildren().remove(nodeInfoText);
 				information.getChildren().remove(maxFlowText);
 				information.getChildren().remove(mouseText);
 				information.getChildren().remove(introText);
@@ -182,8 +196,10 @@ public class Main extends Application {
 					information.getChildren().add(addEdgeText);
 				}
 				mouseState = false;
-				addState = true;
+				addState = false;
 				removeState = false;
+				addEdgeState = true;
+				removeEdgeState = false;
 				if (!addEdgeButton.getStyleClass().contains("clickedToolButton")) {
 					addEdgeButton.getStyleClass().add("clickedToolButton");
 				}
@@ -196,6 +212,8 @@ public class Main extends Application {
 			});
 
 			removeEdgeButton.setOnMouseClicked(event -> {
+				removeSelectedNodes();
+				information.getChildren().remove(nodeInfoText);
 				information.getChildren().remove(maxFlowText);
 				information.getChildren().remove(mouseText);
 				information.getChildren().remove(addNodeText);
@@ -207,7 +225,9 @@ public class Main extends Application {
 				}
 				mouseState = false;
 				addState = false;
-				removeState = true;
+				removeState = false;
+				addEdgeState = false;
+				removeEdgeState = true;
 				if (!removeEdgeButton.getStyleClass().contains("clickedToolButton")) {
 					removeEdgeButton.getStyleClass().add("clickedToolButton");
 				}
@@ -220,6 +240,8 @@ public class Main extends Application {
 			});
 
 			maxFlowButton.setOnMouseClicked(event -> {
+				removeSelectedNodes();
+				information.getChildren().remove(nodeInfoText);
 				information.getChildren().remove(introText);
 				information.getChildren().remove(maxFlowText);
 				information.getChildren().remove(mouseText);
@@ -343,11 +365,40 @@ public class Main extends Application {
 			if (holder <= nodes.size()) {
 				collision(addNodeButton);
 				collision(removeNodeButton);
+				collision(addEdgeButton);
+				collision(removeEdgeButton);
 				collision(mouseButton);
 				collision(maxFlowButton);
 				collision(information);
 			}
 		}
+
+		if (edgeOne != null && edgeTwo != null) {
+			drawConnectingLine();
+		}
+
+		checkEdges();
+	}
+
+	private void removeSelectedNodes() {
+		for (int i = 0; i < nodes.size(); i++) {
+			nodes.get(i).getStyleClass().remove("selectedNode");
+		}
+
+	}
+
+	private void checkEdges() {
+		// TODO Auto-generated method stub
+		// Deletes edge line that are old
+
+	}
+
+	private void drawConnectingLine() {
+		// TODO Auto-generated method stub
+		// Draws Line connecting the Circles
+		EdgeLine temp = new EdgeLine(edgeOne, edgeTwo);
+		edges.add(temp);
+
 	}
 
 	private void collision(Button button) {
@@ -453,6 +504,16 @@ public class Main extends Application {
 
 			setOnMouseReleased(event -> {
 				if (!dead) {
+					if (mouseState) {
+						information.getChildren().clear();
+						nodeInfoText = new Text();
+						nodeInfoText.setFont(new Font(32));
+						nodeInfoText.setText("Node " + numText.getText() + "\n");
+						removeSelectedNodes();
+						this.getStyleClass().add("selectedNode");
+//						nodeInfoText
+						information.getChildren().add(nodeInfoText);
+					}
 					if (removeState) {
 						root.getChildren().remove(this);
 //						setTranslateX(10000);
@@ -478,10 +539,72 @@ public class Main extends Application {
 							}
 						}
 					}
+
+					if (addEdgeState) {
+						if (edgeOne == null) {
+							edgeOne = this;
+						} else if (edgeTwo == null) {
+							edgeTwo = this;
+						} else {
+							edgeTwo = null;
+							edgeOne = this;
+						}
+
+					}
 				}
 			});
+
+//			setOnDragOver(event -> {
+//				if (mouseState) {
+//					setTranslateX(mouseX);
+//					setTranslateY(mouseY);
+//				}
+//			});
+//			setOnDragDetected(new EventHandler<MouseEvent>() {
+//				public void handle(MouseEvent event) {
+//					if (mouseState) {
+//						setTranslateX(mouseX);
+//						setTranslateY(mouseY);
+//						/* drag was detected, start a drag-and-drop gesture */
+//						/* allow any transfer mode */
+////						Dragboard db = startDragAndDrop(TransferMode.ANY);
+//
+//						/* Put a string on a dragboard */
+////						ClipboardContent content = new ClipboardContent();
+////						content.putIfAbsent(new DataFormat(), this);
+////						db.setContent(content);
+//
+//						event.consume();
+//					}
+//				}
+//			});
 		}
 
+		private void removeSelectedNodes() {
+			for (int i = 0; i < nodes.size(); i++) {
+				nodes.get(i).getStyleClass().remove("selectedNode");
+			}
+
+		}
+
+	}
+
+	private class EdgeLine extends StackPane {
+		CircleNode edge1;
+		CircleNode edge2;
+		Line line = new Line();
+
+		public EdgeLine(CircleNode firstEdge, CircleNode secondEdge) {
+			this.autosize();
+
+			setTranslateX(mouseX - 152);
+			setTranslateY(mouseY - 30);
+
+			line.setFill(Color.ORANGE);
+
+			getChildren().addAll(line);
+
+		}
 	}
 
 	public static void main(String[] args) {
