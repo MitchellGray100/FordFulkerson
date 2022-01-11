@@ -44,6 +44,7 @@ public class Main extends Application {
 	private Button removeEdgeButton = new Button("Remove Edge");
 	private ControllerImpl controller = new ControllerImpl();
 	private Text nodeInfoText = new Text();
+	private Scene scene;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -100,9 +101,9 @@ public class Main extends Application {
 			root.add(information, 0, 2, 1, 1);
 			root.add(canvas, 0, 10, 10, 10);
 
-			Scene scene = new Scene(scroll, 1920, 1080);
+			scene = new Scene(scroll, 1920, 1080);
 
-			mouseButton.setOnMouseClicked(event -> {
+			mouseButton.setOnMouseReleased(event -> {
 				edgeOne = null;
 				edgeTwo = null;
 				removeSelectedNodes();
@@ -120,6 +121,8 @@ public class Main extends Application {
 				mouseState = true;
 				addState = false;
 				removeState = false;
+				addEdgeState = false;
+				removeEdgeState = false;
 				if (!mouseButton.getStyleClass().contains("clickedToolButton")) {
 					mouseButton.getStyleClass().add("clickedToolButton");
 				}
@@ -131,7 +134,7 @@ public class Main extends Application {
 				tempCursor = scene.getCursor();
 			});
 
-			addNodeButton.setOnMouseClicked(event -> {
+			addNodeButton.setOnMouseReleased(event -> {
 				edgeOne = null;
 				edgeTwo = null;
 				removeSelectedNodes();
@@ -149,6 +152,8 @@ public class Main extends Application {
 				mouseState = false;
 				addState = true;
 				removeState = false;
+				addEdgeState = false;
+				removeEdgeState = false;
 				if (!addNodeButton.getStyleClass().contains("clickedToolButton")) {
 					addNodeButton.getStyleClass().add("clickedToolButton");
 				}
@@ -160,7 +165,7 @@ public class Main extends Application {
 				removeEdgeButton.getStyleClass().remove("clickedToolButton");
 			});
 
-			removeNodeButton.setOnMouseClicked(event -> {
+			removeNodeButton.setOnMouseReleased(event -> {
 				edgeOne = null;
 				edgeTwo = null;
 				removeSelectedNodes();
@@ -177,6 +182,8 @@ public class Main extends Application {
 				mouseState = false;
 				addState = false;
 				removeState = true;
+				addEdgeState = false;
+				removeEdgeState = false;
 				if (!removeNodeButton.getStyleClass().contains("clickedToolButton")) {
 					removeNodeButton.getStyleClass().add("clickedToolButton");
 				}
@@ -188,7 +195,7 @@ public class Main extends Application {
 				removeEdgeButton.getStyleClass().remove("clickedToolButton");
 			});
 
-			addEdgeButton.setOnMouseClicked(event -> {
+			addEdgeButton.setOnMouseReleased(event -> {
 				edgeOne = null;
 				edgeTwo = null;
 				removeSelectedNodes();
@@ -219,7 +226,7 @@ public class Main extends Application {
 				addNodeButton.getStyleClass().remove("clickedToolButton");
 			});
 
-			removeEdgeButton.setOnMouseClicked(event -> {
+			removeEdgeButton.setOnMouseReleased(event -> {
 				edgeOne = null;
 				edgeTwo = null;
 				removeSelectedNodes();
@@ -249,7 +256,7 @@ public class Main extends Application {
 				addEdgeButton.getStyleClass().remove("clickedToolButton");
 			});
 
-			maxFlowButton.setOnMouseClicked(event -> {
+			maxFlowButton.setOnMouseReleased(event -> {
 				edgeOne = null;
 				edgeTwo = null;
 				removeSelectedNodes();
@@ -270,6 +277,8 @@ public class Main extends Application {
 				mouseState = false;
 				addState = false;
 				removeState = false;
+				addEdgeState = false;
+				removeEdgeState = false;
 //				if (!removeNodeButton.getStyleClass().contains("clickedToolButton")) {
 //					removeNodeButton.getStyleClass().add("clickedToolButton");
 //				}
@@ -500,7 +509,7 @@ public class Main extends Application {
 		Circle circle = new Circle();
 
 		public CircleNode(int num) {
-			this.setPrefSize(100, 100);
+			this.setPrefSize(30, 30);
 			this.autosize();
 			circle.setRadius(30);
 			setTranslateX(mouseX - 152);
@@ -517,11 +526,35 @@ public class Main extends Application {
 			}
 			numText.setFont(new Font(24));
 			getChildren().addAll(circle, numText);
+			circle.setOnMouseEntered(event -> {
+				tempCursor = scene.getCursor();
+				scene.setCursor(Cursor.HAND);
+			});
 
-			setOnMouseReleased(event -> {
+			circle.setOnMouseExited(event -> {
+				scene.setCursor(tempCursor);
+			});
+			circle.setOnMouseReleased(event -> {
 				if (!dead) {
 					if (mouseState) {
+						this.getStyleClass().add("selectedNode");
+						information.getChildren().clear();
+						nodeInfoText = new Text();
+						nodeInfoText.setFont(new Font(32));
+						String controllerInfo = "Node " + numText.getText() + "\n";
+						controllerInfo += "Edges: \n";
+//						Hashtable<Node, Edge> edges = controller.getEdgesOFNode(numVar + 1);
 
+						for (int i = 0; i < edges.size(); i++) {
+							if (edges.get(i).edge1.numText.equals(numText)) {
+								controllerInfo += edges.get(i).edge2.numText.getText() + " ";
+								controllerInfo += controller.getCapacityOfEdge(edges.get(i).edge1.numVar + 1,
+										edges.get(i).edge2.numVar + 1) + "\n";
+							}
+						}
+
+						nodeInfoText.setText(controllerInfo);
+						information.getChildren().add(nodeInfoText);
 						removeSelectedNodes();
 						this.getStyleClass().add("selectedNode");
 //						nodeInfoText
@@ -561,6 +594,31 @@ public class Main extends Application {
 					}
 
 					if (addEdgeState) {
+						if (edgeOne == null) {
+							edgeOne = this;
+						} else if (edgeTwo == null) {
+							edgeTwo = this;
+						} else {
+							removeSelectedNodes();
+							edgeTwo = null;
+							edgeOne = this;
+						}
+						this.getStyleClass().add("selectedNode");
+
+					}
+				}
+			});
+			numText.setOnMouseEntered(event -> {
+				tempCursor = scene.getCursor();
+				scene.setCursor(Cursor.HAND);
+			});
+
+			numText.setOnMouseExited(event -> {
+				scene.setCursor(tempCursor);
+			});
+			numText.setOnMouseReleased(event -> {
+				if (!dead) {
+					if (mouseState) {
 						this.getStyleClass().add("selectedNode");
 						information.getChildren().clear();
 						nodeInfoText = new Text();
@@ -579,15 +637,54 @@ public class Main extends Application {
 
 						nodeInfoText.setText(controllerInfo);
 						information.getChildren().add(nodeInfoText);
+						removeSelectedNodes();
+						this.getStyleClass().add("selectedNode");
+					}
+					if (removeState) {
+						root.getChildren().remove(this);
+//						setTranslateX(10000);
+//						setTranslateY(10000);
+						getChildren().removeAll(circle, numText);
+						dead = true;
+						controller.removeNode(numVar + 1);
+						nodes.remove(this);
+						System.out.println("REMOVED: " + numVar);
+						int holder = edges.size();
+						for (int i = 0; i < holder; i++) {
+							if (edges.get(i).edge1.numText.equals(numText)) {
+								edges.remove(edges.get(i));
+								i--;
+								holder--;
+							}
+						}
+						for (int i = 0; i < nodes.size(); i++) {
+							if (numVar < nodes.get(i).numVar) {
+								System.out.print("num before subtraction" + nodes.get(i).numVar + " ");
+								nodes.get(i).numVar--;
+								System.out.println("num after subtraction" + nodes.get(i).numVar);
+
+								if (nodes.get(i).numVar == -1) {
+									nodes.get(i).numText.setText("s");
+								} else if (nodes.get(i).numVar == 0) {
+									nodes.get(i).numText.setText("t");
+								} else {
+									nodes.get(i).numText.setText(((Integer) nodes.get(i).numVar).toString());
+								}
+							}
+						}
+					}
+
+					if (addEdgeState) {
 						if (edgeOne == null) {
 							edgeOne = this;
 						} else if (edgeTwo == null) {
 							edgeTwo = this;
 						} else {
+							removeSelectedNodes();
 							edgeTwo = null;
 							edgeOne = this;
 						}
-
+						this.getStyleClass().add("selectedNode");
 					}
 				}
 			});
