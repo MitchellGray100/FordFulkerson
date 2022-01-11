@@ -1,5 +1,7 @@
 package application;
 
+import java.util.ArrayList;
+
 import controller.ControllerImpl;
 import javafx.application.Application;
 import javafx.scene.Cursor;
@@ -8,23 +10,32 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
+	private GridPane root = new GridPane();
 	private TextFlow information = new TextFlow();
 	private boolean mouseState = false;
 	private boolean addState = false;
 	private boolean removeState = false;
+	private double mouseX = 0;
+	private double mouseY = 0;
 	private Cursor tempCursor;
+	private ArrayList<CircleNode> nodes = new ArrayList<CircleNode>();
+	ControllerImpl controller = new ControllerImpl();
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 
-			ControllerImpl controller = new ControllerImpl();
+			ScrollPane scroll = new ScrollPane();
 
 			Text introText = new Text("Click a button or node to get started");
 			Text mouseText = new Text("Click a Node to view its info");
@@ -39,13 +50,11 @@ public class Main extends Application {
 			information.getChildren().add(introText);
 			information.setPrefWidth(300);
 
-			GridPane root = new GridPane();
 			root.setHgap(20);
 			root.getStyleClass().add("background");
 
 			Canvas canvas = new Canvas(200, 200);
 
-			ScrollPane scroll = new ScrollPane();
 			scroll.getStyleClass().add("background");
 			scroll.fitToWidthProperty().set(true);
 			scroll.fitToHeightProperty().set(true);
@@ -190,11 +199,84 @@ public class Main extends Application {
 			maxFlowButton.setOnMouseExited(event -> {
 				scene.setCursor(tempCursor);
 			});
+
+			scroll.setOnMouseMoved(event -> {
+				mouseX = event.getX();
+				mouseY = event.getY();
+				System.out.println("sMouseX = " + mouseX + " MouseY = " + mouseY);
+			});
+			scroll.setOnMouseClicked(event -> {
+				if (addState) {
+					CircleNode circle = new CircleNode(controller.getCurrentNode());
+					nodes.add(circle);
+					controller.addNode();
+					root.getChildren().add(circle);
+					System.out.println("ADded: " + controller.getCurrentNode());
+				}
+			});
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+
+	}
+
+	private class CircleNode extends StackPane {
+		int numVar;
+		boolean dead = false;
+		Text numText = new Text();
+		Circle circle = new Circle();
+
+		public CircleNode(int num) {
+			this.setPrefSize(100, 100);
+			this.autosize();
+			circle.setRadius(30);
+			setTranslateX(mouseX - 152);
+			setTranslateY(mouseY - 30);
+			numVar = num;
+			circle.setFill(Color.ORANGE);
+			circle.setStroke(Color.BLACK);
+			if (num == -1) {
+				numText.setText("s");
+			} else if (num == 0) {
+				numText.setText("t");
+			} else {
+				numText.setText(((Integer) num).toString());
+			}
+			numText.setFont(new Font(24));
+			getChildren().addAll(circle, numText);
+
+			setOnMouseReleased(event -> {
+				if (!dead) {
+					if (removeState) {
+						root.getChildren().remove(this);
+//						setTranslateX(10000);
+//						setTranslateY(10000);
+						getChildren().removeAll(circle, numText);
+						dead = true;
+						controller.removeNode(numVar + 1);
+						nodes.remove(this);
+						System.out.println("REMOVED: " + numVar);
+						for (int i = 0; i < nodes.size(); i++) {
+							if (numVar < nodes.get(i).numVar) {
+								System.out.print("num before subtraction" + nodes.get(i).numVar + " ");
+								nodes.get(i).numVar--;
+								System.out.println("num after subtraction" + nodes.get(i).numVar);
+
+								if (nodes.get(i).numVar == -1) {
+									nodes.get(i).numText.setText("s");
+								} else if (nodes.get(i).numVar == 0) {
+									nodes.get(i).numText.setText("t");
+								} else {
+									nodes.get(i).numText.setText(((Integer) nodes.get(i).numVar).toString());
+								}
+							}
+						}
+					}
+				}
+			});
 		}
 
 	}

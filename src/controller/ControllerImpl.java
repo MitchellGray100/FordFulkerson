@@ -25,4 +25,8 @@ public class ControllerImpl {
 	public void removeEdge(int numOne, int numTwo) {
 		graph.removeEdge(numOne, numTwo);
 	}
+
+	public int getCurrentNode() {
+		return graph.getCurrentNode();
+	}
 }

@@ -11,6 +11,8 @@ public class MaxFlowTests {
 	public void singlePath() {
 		Graph graph = new Graph();
 		graph.addNode();
+		graph.addNode();
+		graph.addNode();
 		graph.addEdge(0, 1, 5);
 		assertEquals(5, graph.maxFlow());
 	}
@@ -18,6 +20,8 @@ public class MaxFlowTests {
 	@Test
 	public void bottleNeckedPath() {
 		Graph graph = new Graph();
+		graph.addNode();
+		graph.addNode();
 		graph.addNode();
 		graph.addEdge(0, 2, 5);
 		graph.addEdge(2, 1, 3);
@@ -28,6 +32,8 @@ public class MaxFlowTests {
 	public void doublePath() {
 		Graph graph = new Graph();
 		graph.addNode();
+		graph.addNode();
+		graph.addNode();
 		graph.addEdge(0, 2, 5);
 		graph.addEdge(2, 1, 3);
 		graph.addEdge(0, 1, 3);
@@ -37,6 +43,8 @@ public class MaxFlowTests {
 	@Test
 	public void triplePathNoBenefit() {
 		Graph graph = new Graph();
+		graph.addNode();
+		graph.addNode();
 		graph.addNode();
 		graph.addNode();
 		graph.addEdge(0, 2, 5);
@@ -52,6 +60,8 @@ public class MaxFlowTests {
 		Graph graph = new Graph();
 		graph.addNode();
 		graph.addNode();
+		graph.addNode();
+		graph.addNode();
 		graph.addEdge(0, 2, 5);
 		graph.addEdge(2, 1, 13);
 		graph.addEdge(0, 1, 3);
@@ -63,6 +73,8 @@ public class MaxFlowTests {
 	@Test
 	public void complexProblem() {
 		Graph graph = new Graph();
+		graph.addNode();
+		graph.addNode();
 		graph.addNode();
 		graph.addNode();
 		graph.addNode();

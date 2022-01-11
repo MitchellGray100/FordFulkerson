@@ -10,9 +10,7 @@ public class Graph {
 
 	public Graph() {
 		graph = new ArrayList<Node>();
-		graph.add(new Node(0));// source
-		graph.add(new Node(1));// sink
-		currentNode = 1;
+		currentNode = -1;
 	}
 
 	public Node getNode(int index) {
@@ -27,7 +25,7 @@ public class Graph {
 	public void removeNode(int index) {
 		currentNode--;
 		graph.remove(index);
-		reMap();
+		reMap(index);
 	}
 
 	public void addEdge(int numOne, int numTwo, int capacity) {
@@ -38,8 +36,8 @@ public class Graph {
 		graph.get(numOne).edges.remove(graph.get(numTwo));
 	}
 
-	public void reMap() {
-		for (int i = 2; i <= currentNode; i++) {
+	public void reMap(int index) {
+		for (int i = index; i <= currentNode; i++) {
 			graph.get(i).num--;
 		}
 	}
@@ -131,5 +129,9 @@ public class Graph {
 
 		// Return the overall flow
 		return max_flow;
+	}
+
+	public int getCurrentNode() {
+		return currentNode;
 	}
 }
