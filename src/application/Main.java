@@ -394,10 +394,6 @@ public class Main extends Application {
 			}
 		}
 
-		if (edgeOne != null && edgeTwo != null) {
-			drawConnectingLine();
-		}
-
 		checkEdges();
 	}
 
@@ -411,18 +407,6 @@ public class Main extends Application {
 	private void checkEdges() {
 		// TODO Auto-generated method stub
 		// Deletes edge line that are old
-
-	}
-
-	private void drawConnectingLine() {
-		// TODO Auto-generated method stub
-		// Draws Line connecting the Circles
-		if (addEdgeState) {
-			if (!edges.contains(new EdgeLine(edgeOne, edgeTwo))) {
-				EdgeLine temp = new EdgeLine(edgeOne, edgeTwo);
-				edges.add(temp);
-			}
-		}
 
 	}
 
@@ -570,7 +554,8 @@ public class Main extends Application {
 						System.out.println("REMOVED: " + numVar);
 						int holder = edges.size();
 						for (int i = 0; i < holder; i++) {
-							if (edges.get(i).edge1.numText.equals(numText)) {
+							if (edges.get(i).edge1.numText.equals(numText)
+									|| edges.get(i).edge2.numText.equals(numText)) {
 								edges.remove(edges.get(i));
 								i--;
 								holder--;
@@ -598,6 +583,19 @@ public class Main extends Application {
 							edgeOne = this;
 						} else if (edgeTwo == null) {
 							edgeTwo = this;
+							boolean has = false;
+							for (int i = 0; i < edges.size(); i++) {
+								if ((edges.get(i).edge1.numVar == edgeOne.numVar
+										&& edges.get(i).edge2.numVar == edgeTwo.numVar)) {
+									has = true;
+								}
+							}
+							if (!has) {
+								EdgeLine temp = new EdgeLine(edgeOne, edgeTwo);
+								controller.addEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1, 5);
+								edges.add(temp);
+							}
+
 						} else {
 							removeSelectedNodes();
 							edgeTwo = null;
@@ -651,7 +649,8 @@ public class Main extends Application {
 						System.out.println("REMOVED: " + numVar);
 						int holder = edges.size();
 						for (int i = 0; i < holder; i++) {
-							if (edges.get(i).edge1.numText.equals(numText)) {
+							if (edges.get(i).edge1.numText.equals(numText)
+									|| edges.get(i).edge2.numText.equals(numText)) {
 								edges.remove(edges.get(i));
 								i--;
 								holder--;
@@ -679,6 +678,19 @@ public class Main extends Application {
 							edgeOne = this;
 						} else if (edgeTwo == null) {
 							edgeTwo = this;
+							boolean has = false;
+							for (int i = 0; i < edges.size(); i++) {
+								if ((edges.get(i).edge1.numVar == edgeOne.numVar
+										&& edges.get(i).edge2.numVar == edgeTwo.numVar)) {
+									has = true;
+								}
+							}
+							if (!has) {
+								EdgeLine temp = new EdgeLine(edgeOne, edgeTwo);
+								controller.addEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1, 5);
+								edges.add(temp);
+							}
+
 						} else {
 							removeSelectedNodes();
 							edgeTwo = null;
