@@ -83,6 +83,11 @@ public class Graph {
 	}
 
 	public int maxFlow() {
+
+		if (graph.size() < 2) {
+			return 0;
+		}
+
 		int u, v;
 
 		// Create a residual graph and fill the residual

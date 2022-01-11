@@ -46,7 +46,8 @@ public class Main extends Application {
 			Text mouseText = new Text("Click a Node to view its info");
 			Text addNodeText = new Text("Click anywhere to add a Node");
 			Text removeNodeText = new Text("Click a Node to remove it");
-
+			Text maxFlowText = new Text();
+			;
 			mouseText.setFont(new Font(32));
 			introText.setFont(new Font(32));
 			removeNodeText.setFont(new Font(32));
@@ -84,6 +85,7 @@ public class Main extends Application {
 			Scene scene = new Scene(scroll, 1440, 720);
 
 			mouseButton.setOnMouseClicked(event -> {
+				information.getChildren().remove(maxFlowText);
 				information.getChildren().remove(addNodeText);
 				information.getChildren().remove(introText);
 				information.getChildren().remove(removeNodeText);
@@ -104,6 +106,7 @@ public class Main extends Application {
 			});
 
 			addNodeButton.setOnMouseClicked(event -> {
+				information.getChildren().remove(maxFlowText);
 				information.getChildren().remove(mouseText);
 				information.getChildren().remove(introText);
 				information.getChildren().remove(removeNodeText);
@@ -124,6 +127,7 @@ public class Main extends Application {
 			});
 
 			removeNodeButton.setOnMouseClicked(event -> {
+				information.getChildren().remove(maxFlowText);
 				information.getChildren().remove(mouseText);
 				information.getChildren().remove(addNodeText);
 				information.getChildren().remove(introText);
@@ -143,11 +147,15 @@ public class Main extends Application {
 			});
 
 			maxFlowButton.setOnMouseClicked(event -> {
+				information.getChildren().remove(introText);
+				information.getChildren().remove(maxFlowText);
 				information.getChildren().remove(mouseText);
 				information.getChildren().remove(addNodeText);
 				information.getChildren().remove(removeNodeText);
-				if (!information.getChildren().contains(introText)) {
-					information.getChildren().add(introText);
+				if (!information.getChildren().contains(maxFlowText)) {
+					maxFlowText.setText("Max Flow: " + ((Integer) controller.maxFlow()).toString());
+					maxFlowText.setFont(new Font(32));
+					information.getChildren().add(maxFlowText);
 				}
 
 				mouseState = false;

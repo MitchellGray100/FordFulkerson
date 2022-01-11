@@ -29,4 +29,8 @@ public class ControllerImpl {
 	public int getCurrentNode() {
 		return graph.getCurrentNode();
 	}
+
+	public int maxFlow() {
+		return graph.maxFlow();
+	}
 }
