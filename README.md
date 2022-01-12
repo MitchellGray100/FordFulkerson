@@ -49,7 +49,8 @@ Shows Nodes being removed from the program. Number Ordering of the Nodes is chan
 Shows Edges being added to Nodes. Edges can be added from one Node to itself. Edges can also go from node1 to node2 but can also go from node2 to node1. <br>
 ![GIF of edges being added](https://raw.githubusercontent.com/MitchellGray100/FordFulkerson/main/readMeImages/AddEdgesGIF.gif)
   
-Shows Edges being remove from Nodes. Edges are removed by either clicking on the edge itself or by clicking on the first node of the edge and then the second node of the edge. <br>
+Shows Edges being remove from Nodes. Edges are removed by either clicking on the edge itself or by clicking on the first node of the edge and then the second node of the edge.
+Edges connected to a node that was removed are also removed automatically.<br>
 ![GIF of edges being removed](https://raw.githubusercontent.com/MitchellGray100/FordFulkerson/main/readMeImages/RemoveEdgesGIF.gif)
   
 Shows Capacities of the Edges being changed. Hovering over an edge changes the edge to orange and changes the mouse to a hand to make it easier for the user to click on the edge. <br>
