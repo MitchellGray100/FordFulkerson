@@ -840,9 +840,13 @@ public class Main extends Application {
 				path.setStrokeWidth(2);
 				path.getElements().add(moveTo);
 				path.getElements().add(quadTo);
+				int translateX = 150;
+				if (firstEdge.getTranslateX() > scene.getWidth() / 2) {
+					translateX = -118;
+				}
 				moveTo.setX(firstEdge.getTranslateX() + 32);
 				moveTo.setY(firstEdge.getTranslateY() + 32 + 32);
-				quadTo.setControlX(firstEdge.getTranslateX() + 32 - 150);
+				quadTo.setControlX(firstEdge.getTranslateX() + 32 - translateX);
 				quadTo.setControlY((firstEdge.getTranslateY() + 32 + secondEdge.getTranslateY() + 32 - 16) / 2);
 				quadTo.setX(secondEdge.getTranslateX() + 32);
 				quadTo.setY(secondEdge.getTranslateY() + 32 - 32);
