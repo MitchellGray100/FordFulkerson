@@ -49,7 +49,6 @@ public class Main extends Application {
 	private Text nodeInfoText = new Text();
 	private Scene scene;
 
-	// TODO Warped Line when self path
 	// TODO Allow Changing of Capacities
 	@Override
 	public void start(Stage primaryStage) {
