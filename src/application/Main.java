@@ -1,5 +1,6 @@
 package application;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.UnaryOperator;
@@ -14,6 +15,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -59,6 +61,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 
+			Image favicon = new Image(new FileInputStream("src/FordFulkersonImage.png"));
+			primaryStage.getIcons().add(favicon);
 			ScrollPane scroll = new ScrollPane();
 
 			Text introText = new Text("Click a button to get started.");
@@ -901,6 +905,12 @@ public class Main extends Application {
 
 				return null;
 			};
+			int capacityOfEdge = 0;
+			for (int i = 0; i < edges.size(); i++) {
+				if ((edges.get(i).edge1.numVar == edge1.numVar && edges.get(i).edge2.numVar == edge2.numVar)) {
+					capacityOfEdge = controller.getCapacityOfEdge(edge1.numVar + 1, edge2.numVar + 1);
+				}
+			}
 			TextFormatter<String> textFormatter = new TextFormatter<>(filter);
 			input.setTextFormatter(textFormatter);
 			input.setPromptText("Capacity");
