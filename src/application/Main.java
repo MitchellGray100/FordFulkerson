@@ -55,7 +55,6 @@ public class Main extends Application {
 	private EdgeLine tempEdgeLine;
 	private Scene scene;
 
-	// TODO Allow Changing of Capacities
 	@Override
 	public void start(Stage primaryStage) {
 		try {
