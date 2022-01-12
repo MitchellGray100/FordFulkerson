@@ -2,6 +2,7 @@ package application;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.function.UnaryOperator;
 
 import controller.ControllerImpl;
 import javafx.animation.AnimationTimer;
@@ -10,6 +11,9 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -47,6 +51,8 @@ public class Main extends Application {
 	private Button removeEdgeButton = new Button("Remove Edge");
 	private ControllerImpl controller = new ControllerImpl();
 	private Text nodeInfoText = new Text();
+	private TextField temp;
+	private EdgeLine tempEdgeLine;
 	private Scene scene;
 
 	// TODO Allow Changing of Capacities
@@ -112,6 +118,12 @@ public class Main extends Application {
 			scene = new Scene(root, 1920, 1080);
 
 			mouseButton.setOnMouseReleased(event -> {
+				if (tempEdgeLine != null) {
+					controller.addEdge(tempEdgeLine.edge1.numVar + 1, tempEdgeLine.edge2.numVar + 1,
+							Integer.parseInt(temp.getText()));
+//					System.out.println("The number is: " + Integer.parseInt(temp.getText()));
+				}
+				root.getChildren().remove(temp);
 				edgeOne = null;
 				edgeTwo = null;
 				removeSelectedNodes();
@@ -143,6 +155,12 @@ public class Main extends Application {
 			});
 
 			addNodeButton.setOnMouseReleased(event -> {
+				if (tempEdgeLine != null) {
+					controller.addEdge(tempEdgeLine.edge1.numVar + 1, tempEdgeLine.edge2.numVar + 1,
+							Integer.parseInt(temp.getText()));
+//					System.out.println("The number is: " + Integer.parseInt(temp.getText()));
+				}
+				root.getChildren().remove(temp);
 				edgeOne = null;
 				edgeTwo = null;
 				removeSelectedNodes();
@@ -174,6 +192,12 @@ public class Main extends Application {
 			});
 
 			removeNodeButton.setOnMouseReleased(event -> {
+				if (tempEdgeLine != null) {
+					controller.addEdge(tempEdgeLine.edge1.numVar + 1, tempEdgeLine.edge2.numVar + 1,
+							Integer.parseInt(temp.getText()));
+//					System.out.println("The number is: " + Integer.parseInt(temp.getText()));
+				}
+				root.getChildren().remove(temp);
 				edgeOne = null;
 				edgeTwo = null;
 				removeSelectedNodes();
@@ -204,6 +228,12 @@ public class Main extends Application {
 			});
 
 			addEdgeButton.setOnMouseReleased(event -> {
+				if (tempEdgeLine != null) {
+					controller.addEdge(tempEdgeLine.edge1.numVar + 1, tempEdgeLine.edge2.numVar + 1,
+							Integer.parseInt(temp.getText()));
+//					System.out.println("The number is: " + Integer.parseInt(temp.getText()));
+				}
+				root.getChildren().remove(temp);
 				edgeOne = null;
 				edgeTwo = null;
 				removeSelectedNodes();
@@ -235,6 +265,12 @@ public class Main extends Application {
 			});
 
 			removeEdgeButton.setOnMouseReleased(event -> {
+				if (tempEdgeLine != null) {
+					controller.addEdge(tempEdgeLine.edge1.numVar + 1, tempEdgeLine.edge2.numVar + 1,
+							Integer.parseInt(temp.getText()));
+//					System.out.println("The number is: " + Integer.parseInt(temp.getText()));
+				}
+				root.getChildren().remove(temp);
 				edgeOne = null;
 				edgeTwo = null;
 				removeSelectedNodes();
@@ -265,6 +301,12 @@ public class Main extends Application {
 			});
 
 			maxFlowButton.setOnMouseReleased(event -> {
+				if (tempEdgeLine != null) {
+					controller.addEdge(tempEdgeLine.edge1.numVar + 1, tempEdgeLine.edge2.numVar + 1,
+							Integer.parseInt(temp.getText()));
+//					System.out.println("The number is: " + Integer.parseInt(temp.getText()));
+				}
+				root.getChildren().remove(temp);
 				edgeOne = null;
 				edgeTwo = null;
 				removeSelectedNodes();
@@ -364,7 +406,9 @@ public class Main extends Application {
 				mouseY = event.getY();
 //				System.out.println("MouseX = " + mouseX + " MouseY = " + mouseY);
 			});
+
 			root.setOnMouseClicked(event -> {
+
 				if (addState) {
 					if (mouseX > 300 && mouseY > 100) {
 						CircleNode circle = new CircleNode(controller.getCurrentNode());
@@ -521,6 +565,12 @@ public class Main extends Application {
 				scene.setCursor(tempCursor);
 			});
 			circle.setOnMouseReleased(event -> {
+				if (tempEdgeLine != null) {
+					controller.addEdge(tempEdgeLine.edge1.numVar + 1, tempEdgeLine.edge2.numVar + 1,
+							Integer.parseInt(temp.getText()));
+//					System.out.println("The number is: " + Integer.parseInt(temp.getText()));
+				}
+				root.getChildren().remove(temp);
 				if (!dead) {
 					if (mouseState) {
 						this.getStyleClass().add("selectedNode");
@@ -649,6 +699,12 @@ public class Main extends Application {
 				scene.setCursor(tempCursor);
 			});
 			numText.setOnMouseReleased(event -> {
+				if (tempEdgeLine != null) {
+					controller.addEdge(tempEdgeLine.edge1.numVar + 1, tempEdgeLine.edge2.numVar + 1,
+							Integer.parseInt(temp.getText()));
+//					System.out.println("The number is: " + Integer.parseInt(temp.getText()));
+				}
+				root.getChildren().remove(temp);
 				if (!dead) {
 					if (mouseState) {
 						this.getStyleClass().add("selectedNode");
@@ -802,8 +858,21 @@ public class Main extends Application {
 		CircleNode edge2;
 		Line line = new Line();
 		Path path = new Path();
+		TextField input = new TextField();
 
 		public EdgeLine(CircleNode firstEdge, CircleNode secondEdge) {
+			UnaryOperator<Change> filter = change -> {
+				String text = change.getText();
+
+				if (text.matches("[0-9]*")) {
+					return change;
+				}
+
+				return null;
+			};
+			TextFormatter<String> textFormatter = new TextFormatter<>(filter);
+			input.setTextFormatter(textFormatter);
+			input.setPromptText("Capacity");
 //			moveTo.setX(0.0f);
 //			moveTo.setY(50.0f);
 //			quadTo.setControlX(25.0f);
@@ -815,12 +884,14 @@ public class Main extends Application {
 //			setTranslateY(mouseY - 30);
 			edge1 = firstEdge;
 			edge2 = secondEdge;
-			controller.addEdge(edge1.numVar + 1, edge2.numVar + 1, 5);
+			controller.addEdge(edge1.numVar + 1, edge2.numVar + 1, 0);
 
 //			line.setStartX(edge1.getTranslateX());
 //			line.setStartX(edge1.getTranslateY());
 //			line.setEndX(edge2.getTranslateX());
 //			line.setEndY(edge2.getTranslateY());
+			input.setPrefSize(300, 300);
+			input.setFont(new Font(45));
 
 			boolean selfLoop = false;
 			if (edge1.numVar == edge2.numVar) {
@@ -884,6 +955,12 @@ public class Main extends Application {
 //			root.getChildren().add(this);
 
 			line.setOnMouseReleased(event -> {
+				root.getChildren().remove(temp);
+				if (tempEdgeLine != null) {
+					controller.addEdge(tempEdgeLine.edge1.numVar + 1, tempEdgeLine.edge2.numVar + 1,
+							Integer.parseInt(temp.getText()));
+//					System.out.println("The number is: " + Integer.parseInt(temp.getText()));
+				}
 				if (removeEdgeState) {
 					root.getChildren().remove(line);
 					line.setStrokeWidth(0);
@@ -895,6 +972,13 @@ public class Main extends Application {
 							edges.remove(i);
 							break;
 						}
+					}
+				}
+				if (mouseState) {
+					if (!root.getChildren().contains(input)) {
+						temp = input;
+						tempEdgeLine = this;
+						root.getChildren().add(input);
 					}
 				}
 			});
@@ -917,6 +1001,12 @@ public class Main extends Application {
 				}
 			});
 			path.setOnMouseReleased(event -> {
+				root.getChildren().remove(temp);
+				if (tempEdgeLine != null) {
+					controller.addEdge(tempEdgeLine.edge1.numVar + 1, tempEdgeLine.edge2.numVar + 1,
+							Integer.parseInt(temp.getText()));
+//					System.out.println("The number is: " + Integer.parseInt(temp.getText()));
+				}
 				if (removeEdgeState) {
 					root.getChildren().remove(path);
 					path.setStrokeWidth(0);
@@ -928,6 +1018,13 @@ public class Main extends Application {
 							edges.remove(i);
 							break;
 						}
+					}
+				}
+				if (mouseState) {
+					if (!root.getChildren().contains(input)) {
+						temp = input;
+						tempEdgeLine = this;
+						root.getChildren().add(input);
 					}
 				}
 			});
