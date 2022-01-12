@@ -362,7 +362,7 @@ public class Main extends Application {
 			root.setOnMouseMoved(event -> {
 				mouseX = event.getX();
 				mouseY = event.getY();
-				System.out.println("MouseX = " + mouseX + " MouseY = " + mouseY);
+//				System.out.println("MouseX = " + mouseX + " MouseY = " + mouseY);
 			});
 			root.setOnMouseClicked(event -> {
 				if (addState) {
@@ -373,7 +373,7 @@ public class Main extends Application {
 						circle.setTranslateY(mouseY - 32);
 						controller.addNode();
 						root.getChildren().add(circle);
-						System.out.println("ADded: " + controller.getCurrentNode());
+//						System.out.println("ADded: " + controller.getCurrentNode());
 					}
 				}
 			});
@@ -426,7 +426,7 @@ public class Main extends Application {
 		for (int i = 0; i < holder; i++) {
 			if (holder <= nodes.size()) {
 				if (nodes.get(i).getBoundsInParent().intersects(button.getBoundsInParent())) {
-					System.out.println("COLLISION ERROR");
+//					System.out.println("COLLISION ERROR");
 					root.getChildren().remove(nodes.get(i));
 //					nodes.get(i).getChildren().removeAll(nodes.get(i).circle, nodes.get(i).numText);
 					nodes.get(i).dead = true;
@@ -434,9 +434,9 @@ public class Main extends Application {
 					nodes.remove(nodes.get(i));
 					for (int j = 0; j < nodes.size(); j++) {
 						if (nodes.get(i).numVar < nodes.get(j).numVar) {
-							System.out.print("num before subtraction" + nodes.get(j).numVar + " ");
+							// System.out.print("num before subtraction" + nodes.get(j).numVar + " ");
 							nodes.get(j).numVar--;
-							System.out.println("num after subtraction" + nodes.get(j).numVar);
+							// System.out.println("num after subtraction" + nodes.get(j).numVar);
 
 							if (nodes.get(j).numVar == -1) {
 								nodes.get(j).numText.setText("s");
@@ -464,9 +464,9 @@ public class Main extends Application {
 					nodes.remove(nodes.get(i));
 					for (int j = 0; j < nodes.size(); j++) {
 						if (nodes.get(i).numVar < nodes.get(j).numVar) {
-							System.out.print("num before subtraction" + nodes.get(j).numVar + " ");
+//							System.out.print("num before subtraction" + nodes.get(j).numVar + " ");
 							nodes.get(j).numVar--;
-							System.out.println("num after subtraction" + nodes.get(j).numVar);
+//							System.out.println("num after subtraction" + nodes.get(j).numVar);
 
 							if (nodes.get(j).numVar == -1) {
 								nodes.get(j).numText.setText("s");
@@ -560,7 +560,7 @@ public class Main extends Application {
 						dead = true;
 						controller.removeNode(numVar + 1);
 						nodes.remove(this);
-						System.out.println("REMOVED: " + numVar);
+//						System.out.println("REMOVED: " + numVar);
 						int holder = edges.size();
 						for (int i = 0; i < holder; i++) {
 							if (edges.get(i).edge1.numText.equals(numText)
@@ -574,9 +574,9 @@ public class Main extends Application {
 						}
 						for (int i = 0; i < nodes.size(); i++) {
 							if (numVar < nodes.get(i).numVar) {
-								System.out.print("num before subtraction" + nodes.get(i).numVar + " ");
+//								System.out.print("num before subtraction" + nodes.get(i).numVar + " ");
 								nodes.get(i).numVar--;
-								System.out.println("num after subtraction" + nodes.get(i).numVar);
+//								System.out.println("num after subtraction" + nodes.get(i).numVar);
 
 								if (nodes.get(i).numVar == -1) {
 									nodes.get(i).numText.setText("s");
@@ -687,7 +687,7 @@ public class Main extends Application {
 						dead = true;
 						controller.removeNode(numVar + 1);
 						nodes.remove(this);
-						System.out.println("REMOVED: " + numVar);
+//						System.out.println("REMOVED: " + numVar);
 						int holder = edges.size();
 						for (int i = 0; i < holder; i++) {
 							if (edges.get(i).edge1.numText.equals(numText)
@@ -701,9 +701,9 @@ public class Main extends Application {
 						}
 						for (int i = 0; i < nodes.size(); i++) {
 							if (numVar < nodes.get(i).numVar) {
-								System.out.print("num before subtraction" + nodes.get(i).numVar + " ");
+//								System.out.print("num before subtraction" + nodes.get(i).numVar + " ");
 								nodes.get(i).numVar--;
-								System.out.println("num after subtraction" + nodes.get(i).numVar);
+								// System.out.println("num after subtraction" + nodes.get(i).numVar);
 
 								if (nodes.get(i).numVar == -1) {
 									nodes.get(i).numText.setText("s");
