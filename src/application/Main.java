@@ -677,7 +677,7 @@ public class Main extends Application {
 							}
 							if (!has) {
 								EdgeLine temp = new EdgeLine(edgeOne, edgeTwo);
-								controller.addEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1, 5);
+								controller.addEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1, 0);
 								// ADD EDGE HERE TODO
 								edges.add(temp);
 							}
@@ -814,7 +814,7 @@ public class Main extends Application {
 							}
 							if (!has) {
 								EdgeLine temp = new EdgeLine(edgeOne, edgeTwo);
-								controller.addEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1, 5);
+								controller.addEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1, 0);
 								edges.add(temp);
 							}
 
