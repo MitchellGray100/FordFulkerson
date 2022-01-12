@@ -830,39 +830,59 @@ public class Main extends Application {
 //			line.setEndX(edge2.getTranslateX());
 //			line.setEndY(edge2.getTranslateY());
 
-			boolean doubleLine = false;
-			for (int i = 0; i < edges.size(); i++) {
-				if (((edges.get(i).edge1.numVar == edge1.numVar && edges.get(i).edge2.numVar == edge2.numVar))
-						|| ((edges.get(i).edge1.numVar == edge2.numVar && edges.get(i).edge2.numVar == edge1.numVar))) {
-					doubleLine = true;
-
-					break;
-				}
+			boolean selfLoop = false;
+			if (edge1.numVar == edge2.numVar) {
+				selfLoop = true;
 			}
-			if (doubleLine) {
+			if (selfLoop) {
 				QuadCurveTo quadTo = new QuadCurveTo();
 				MoveTo moveTo = new MoveTo();
 				path.setStrokeWidth(2);
 				path.getElements().add(moveTo);
 				path.getElements().add(quadTo);
 				moveTo.setX(firstEdge.getTranslateX() + 32);
-				moveTo.setY(firstEdge.getTranslateY() + 32);
-				quadTo.setControlX((firstEdge.getTranslateX() + 32 + secondEdge.getTranslateX() + 32) / 2);
-				quadTo.setControlY((firstEdge.getTranslateY() + 32 + secondEdge.getTranslateY() + 32));
+				moveTo.setY(firstEdge.getTranslateY() + 32 + 32);
+				quadTo.setControlX(firstEdge.getTranslateX() + 32 - 150);
+				quadTo.setControlY((firstEdge.getTranslateY() + 32 + secondEdge.getTranslateY() + 32 - 16) / 2);
 				quadTo.setX(secondEdge.getTranslateX() + 32);
-				quadTo.setY(secondEdge.getTranslateY() + 32);
+				quadTo.setY(secondEdge.getTranslateY() + 32 - 32);
 				root.getChildren().add(path);
-
 			} else {
-				line.setStartX(firstEdge.getTranslateX() + 32);
-				line.setStartY(firstEdge.getTranslateY() + 32);
-				line.setEndX(secondEdge.getTranslateX() + 32);
-				line.setEndY(secondEdge.getTranslateY() + 32);
-				line.setTranslateX(firstEdge.circle.getTranslateX());
-				line.setTranslateY(firstEdge.circle.getTranslateY());
-				line.setFill(Color.BLACK);
-				line.setStrokeWidth(2);
-				root.getChildren().add(line);
+				boolean doubleLine = false;
+				for (int i = 0; i < edges.size(); i++) {
+					if (((edges.get(i).edge1.numVar == edge1.numVar && edges.get(i).edge2.numVar == edge2.numVar))
+							|| ((edges.get(i).edge1.numVar == edge2.numVar
+									&& edges.get(i).edge2.numVar == edge1.numVar))) {
+						doubleLine = true;
+
+						break;
+					}
+				}
+				if (doubleLine) {
+					QuadCurveTo quadTo = new QuadCurveTo();
+					MoveTo moveTo = new MoveTo();
+					path.setStrokeWidth(2);
+					path.getElements().add(moveTo);
+					path.getElements().add(quadTo);
+					moveTo.setX(firstEdge.getTranslateX() + 32);
+					moveTo.setY(firstEdge.getTranslateY() + 32);
+					quadTo.setControlX((firstEdge.getTranslateX() + 32 + secondEdge.getTranslateX() + 32) / 2);
+					quadTo.setControlY((firstEdge.getTranslateY() + 32 + secondEdge.getTranslateY() + 32));
+					quadTo.setX(secondEdge.getTranslateX() + 32);
+					quadTo.setY(secondEdge.getTranslateY() + 32);
+					root.getChildren().add(path);
+
+				} else {
+					line.setStartX(firstEdge.getTranslateX() + 32);
+					line.setStartY(firstEdge.getTranslateY() + 32);
+					line.setEndX(secondEdge.getTranslateX() + 32);
+					line.setEndY(secondEdge.getTranslateY() + 32);
+					line.setTranslateX(firstEdge.circle.getTranslateX());
+					line.setTranslateY(firstEdge.circle.getTranslateY());
+					line.setFill(Color.BLACK);
+					line.setStrokeWidth(2);
+					root.getChildren().add(line);
+				}
 			}
 
 //			root.getChildren().add(this);
@@ -933,6 +953,7 @@ public class Main extends Application {
 					scene.setCursor(tempCursor);
 				}
 			});
+
 		}
 
 	}
