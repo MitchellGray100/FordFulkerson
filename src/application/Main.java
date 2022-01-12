@@ -837,9 +837,8 @@ public class Main extends Application {
 					line.setStrokeWidth(0);
 
 					for (int i = 0; i < edges.size(); i++) {
-						if ((edges.get(i).edge1.numVar == edgeOne.numVar
-								&& edges.get(i).edge2.numVar == edgeTwo.numVar)) {
-							controller.removeEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1);
+						if ((edges.get(i).edge1.numVar == edge1.numVar && edges.get(i).edge2.numVar == edge2.numVar)) {
+							controller.removeEdge(edge1.numVar + 1, edge2.numVar + 1);
 							edges.get(i).line.setStrokeWidth(0);
 							edges.remove(i);
 							break;
