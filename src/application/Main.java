@@ -48,7 +48,7 @@ public class Main extends Application {
 
 	// TODO Curved lines when double
 	// TODO Allow Changing of Capacities
-
+	// TODO Remove Edge by clicking it
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -514,11 +514,16 @@ public class Main extends Application {
 			numText.setFont(new Font(24));
 			getChildren().addAll(circle, numText);
 			circle.setOnMouseEntered(event -> {
+				if (!circle.getStyleClass().contains("hoveredNode")) {
+					circle.getStyleClass().add("hoveredNode");
+
+				}
 				tempCursor = scene.getCursor();
 				scene.setCursor(Cursor.HAND);
 			});
 
 			circle.setOnMouseExited(event -> {
+				circle.getStyleClass().remove("hoveredNode");
 				scene.setCursor(tempCursor);
 			});
 			circle.setOnMouseReleased(event -> {
@@ -635,11 +640,16 @@ public class Main extends Application {
 				}
 			});
 			numText.setOnMouseEntered(event -> {
+				if (!circle.getStyleClass().contains("hoveredNode")) {
+					circle.getStyleClass().add("hoveredNode");
+
+				}
 				tempCursor = scene.getCursor();
 				scene.setCursor(Cursor.HAND);
 			});
 
 			numText.setOnMouseExited(event -> {
+				circle.getStyleClass().remove("hoveredNode");
 				scene.setCursor(tempCursor);
 			});
 			numText.setOnMouseReleased(event -> {
@@ -795,7 +805,7 @@ public class Main extends Application {
 		Line line = new Line();
 
 		public EdgeLine(CircleNode firstEdge, CircleNode secondEdge) {
-			line.setStrokeWidth(1);
+			line.setStrokeWidth(2);
 
 //
 //			setTranslateX(mouseX - 152);
@@ -821,6 +831,40 @@ public class Main extends Application {
 			root.getChildren().add(line);
 //			root.getChildren().add(this);
 
+			line.setOnMouseReleased(event -> {
+				if (removeEdgeState) {
+					root.getChildren().remove(line);
+					line.setStrokeWidth(0);
+
+					for (int i = 0; i < edges.size(); i++) {
+						if ((edges.get(i).edge1.numVar == edgeOne.numVar
+								&& edges.get(i).edge2.numVar == edgeTwo.numVar)) {
+							controller.removeEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1);
+							edges.get(i).line.setStrokeWidth(0);
+							edges.remove(i);
+							break;
+						}
+					}
+				}
+			});
+			line.setOnMouseEntered(event -> {
+				if (!line.getStyleClass().contains("clickedToolButton")) {
+
+					line.setFill(Color.ORANGE);
+					line.setStroke(Color.ORANGE);
+					tempCursor = scene.getCursor();
+					scene.setCursor(Cursor.HAND);
+				}
+			});
+
+			line.setOnMouseExited(event -> {
+				if (!line.getStyleClass().contains("clickedToolButton")) {
+
+					line.setFill(Color.BLACK);
+					line.setStroke(Color.BLACK);
+					scene.setCursor(tempCursor);
+				}
+			});
 		}
 	}
 
