@@ -15,6 +15,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -48,19 +51,18 @@ public class Main extends Application {
 
 	// TODO Curved lines when double
 	// TODO Allow Changing of Capacities
-	// TODO Remove Edge by clicking it
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 
 			ScrollPane scroll = new ScrollPane();
 
-			Text introText = new Text("Click a button or node to get started");
-			Text mouseText = new Text("Click a Node to view its info");
-			Text addNodeText = new Text("Click anywhere to add a Node");
-			Text removeNodeText = new Text("Click a Node to remove it");
-			Text addEdgeText = new Text("Click two Nodes to add an Edge");
-			Text removeEdgeText = new Text("Click an Edge to remove it");
+			Text introText = new Text("Click a button to get started.");
+			Text mouseText = new Text("Click a Node or Edge to view its info.");
+			Text addNodeText = new Text("Click anywhere to add a Node.");
+			Text removeNodeText = new Text("Click a Node to remove it.");
+			Text addEdgeText = new Text("Click two Nodes to add an Edge.");
+			Text removeEdgeText = new Text("Click an Edge to remove it or click two Nodes.");
 			Text maxFlowText = new Text();
 			;
 			mouseText.setFont(new Font(32));
@@ -803,15 +805,18 @@ public class Main extends Application {
 		CircleNode edge1;
 		CircleNode edge2;
 		Line line = new Line();
+		Path path = new Path();
 
 		public EdgeLine(CircleNode firstEdge, CircleNode secondEdge) {
-			line.setStrokeWidth(2);
+//			moveTo.setX(0.0f);
+//			moveTo.setY(50.0f);
+//			quadTo.setControlX(25.0f);
+//			quadTo.setControlY(25f);
+//			quadTo.setX(50.0f);
+//			quadTo.setY(50.0f);
 
-//
 //			setTranslateX(mouseX - 152);
 //			setTranslateY(mouseY - 30);
-			line.setTranslateX(firstEdge.circle.getTranslateX());
-			line.setTranslateY(firstEdge.circle.getTranslateY());
 			edge1 = firstEdge;
 			edge2 = secondEdge;
 			controller.addEdge(edge1.numVar + 1, edge2.numVar + 1, 5);
@@ -821,14 +826,41 @@ public class Main extends Application {
 //			line.setEndX(edge2.getTranslateX());
 //			line.setEndY(edge2.getTranslateY());
 
-			line.setStartX(firstEdge.getTranslateX() + 32);
-			line.setStartY(firstEdge.getTranslateY() + 32);
-			line.setEndX(secondEdge.getTranslateX() + 32);
-			line.setEndY(secondEdge.getTranslateY() + 32);
-			line.setFill(Color.BLACK);
+			boolean doubleLine = false;
+			for (int i = 0; i < edges.size(); i++) {
+				if (((edges.get(i).edge1.numVar == edge1.numVar && edges.get(i).edge2.numVar == edge2.numVar))
+						|| ((edges.get(i).edge1.numVar == edge2.numVar && edges.get(i).edge2.numVar == edge1.numVar))) {
+					doubleLine = true;
 
-			getChildren().addAll(line);
-			root.getChildren().add(line);
+					break;
+				}
+			}
+			if (doubleLine) {
+				QuadCurveTo quadTo = new QuadCurveTo();
+				MoveTo moveTo = new MoveTo();
+				path.setStrokeWidth(2);
+				path.getElements().add(moveTo);
+				path.getElements().add(quadTo);
+				moveTo.setX(firstEdge.getTranslateX() + 32);
+				moveTo.setY(firstEdge.getTranslateY() + 32);
+				quadTo.setControlX((firstEdge.getTranslateX() + 32 + secondEdge.getTranslateX() + 32) / 2);
+				quadTo.setControlY((firstEdge.getTranslateY() + 32 + secondEdge.getTranslateY() + 32));
+				quadTo.setX(secondEdge.getTranslateX() + 32);
+				quadTo.setY(secondEdge.getTranslateY() + 32);
+				root.getChildren().add(path);
+
+			} else {
+				line.setStartX(firstEdge.getTranslateX() + 32);
+				line.setStartY(firstEdge.getTranslateY() + 32);
+				line.setEndX(secondEdge.getTranslateX() + 32);
+				line.setEndY(secondEdge.getTranslateY() + 32);
+				line.setTranslateX(firstEdge.circle.getTranslateX());
+				line.setTranslateY(firstEdge.circle.getTranslateY());
+				line.setFill(Color.BLACK);
+				line.setStrokeWidth(2);
+				root.getChildren().add(line);
+			}
+
 //			root.getChildren().add(this);
 
 			line.setOnMouseReleased(event -> {
@@ -864,7 +896,41 @@ public class Main extends Application {
 					scene.setCursor(tempCursor);
 				}
 			});
+			path.setOnMouseReleased(event -> {
+				if (removeEdgeState) {
+					root.getChildren().remove(path);
+					path.setStrokeWidth(0);
+
+					for (int i = 0; i < edges.size(); i++) {
+						if ((edges.get(i).edge1.numVar == edge1.numVar && edges.get(i).edge2.numVar == edge2.numVar)) {
+							controller.removeEdge(edge1.numVar + 1, edge2.numVar + 1);
+							edges.get(i).path.setStrokeWidth(0);
+							edges.remove(i);
+							break;
+						}
+					}
+				}
+			});
+			path.setOnMouseEntered(event -> {
+				if (!path.getStyleClass().contains("clickedToolButton")) {
+
+//					path.setFill(Color.ORANGE);
+					path.setStroke(Color.ORANGE);
+					tempCursor = scene.getCursor();
+					scene.setCursor(Cursor.HAND);
+				}
+			});
+
+			path.setOnMouseExited(event -> {
+				if (!path.getStyleClass().contains("clickedToolButton")) {
+
+//					path.setFill(Color.BLACK);
+					path.setStroke(Color.BLACK);
+					scene.setCursor(tempCursor);
+				}
+			});
 		}
+
 	}
 
 	public static void main(String[] args) {
