@@ -10,7 +10,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	private GridPane root = new GridPane();
+	private Pane root = new Pane();
 	private TextFlow information = new TextFlow();
 	private boolean mouseState = false;
 	private boolean addState = false;
@@ -69,18 +69,18 @@ public class Main extends Application {
 			nodeInfoText.setFont(new Font(32));
 			information.getStyleClass().add("textBubble");
 			information.getChildren().add(introText);
-			information.setPrefWidth(300);
+			information.setPrefSize(300, 1080);
 
-			root.setHgap(20);
+//			root.setHgap(20);
 			root.getStyleClass().add("background");
 
 			scroll.getStyleClass().add("background");
-			scroll.fitToWidthProperty().set(true);
+//			scroll.fitToWidthProperty().set(true);
 			scroll.fitToHeightProperty().set(true);
 			scroll.hbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.ALWAYS);
 			scroll.vbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.ALWAYS);
 			scroll.setPannable(false);
-			scroll.setContent(root);
+			scroll.setContent(information);
 
 			mouseButton.getStyleClass().add("toolButton");
 			addNodeButton.getStyleClass().add("toolButton");
@@ -90,15 +90,22 @@ public class Main extends Application {
 			maxFlowButton.getStyleClass().add("toolButton");
 			maxFlowButton.setId("maxFlow");
 
-			root.add(mouseButton, 1, 0, 5, 3);
-			root.add(addNodeButton, 6, 0, 5, 3);
-			root.add(removeNodeButton, 11, 0, 5, 3);
-			root.add(addEdgeButton, 16, 0, 5, 3);
-			root.add(removeEdgeButton, 21, 0, 5, 3);
-			root.add(maxFlowButton, 26, 0, 5, 3);
-			root.add(information, 0, 2, 1, 1);
+			root.getChildren().add(scroll);
+			root.getChildren().add(mouseButton);
+			mouseButton.setTranslateX(313);
+			root.getChildren().add(addNodeButton);
+			addNodeButton.setTranslateX(460);
+			root.getChildren().add(removeNodeButton);
+			removeNodeButton.setTranslateX(655);
+			root.getChildren().add(addEdgeButton);
+			addEdgeButton.setTranslateX(915);
+			root.getChildren().add(removeEdgeButton);
+			removeEdgeButton.setTranslateX(1111);
+			root.getChildren().add(maxFlowButton);
+			maxFlowButton.setTranslateX(1368);
+			root.getChildren().add(information);
 
-			scene = new Scene(scroll, 1920, 1080);
+			scene = new Scene(root, 1920, 1080);
 
 			mouseButton.setOnMouseReleased(event -> {
 				edgeOne = null;
@@ -348,18 +355,22 @@ public class Main extends Application {
 				scene.setCursor(tempCursor);
 			});
 
-			scroll.setOnMouseMoved(event -> {
+			root.setOnMouseMoved(event -> {
 				mouseX = event.getX();
 				mouseY = event.getY();
 				System.out.println("MouseX = " + mouseX + " MouseY = " + mouseY);
 			});
-			scroll.setOnMouseClicked(event -> {
+			root.setOnMouseClicked(event -> {
 				if (addState) {
-					CircleNode circle = new CircleNode(controller.getCurrentNode());
-					nodes.add(circle);
-					controller.addNode();
-					root.add(circle, 0, 0);
-					System.out.println("ADded: " + controller.getCurrentNode());
+					if (mouseX > 300 && mouseY > 100) {
+						CircleNode circle = new CircleNode(controller.getCurrentNode());
+						nodes.add(circle);
+						circle.setTranslateX(mouseX - 32);
+						circle.setTranslateY(mouseY - 32);
+						controller.addNode();
+						root.getChildren().add(circle);
+						System.out.println("ADded: " + controller.getCurrentNode());
+					}
 				}
 			});
 			AnimationTimer animationTimer = new AnimationTimer() {
@@ -545,6 +556,7 @@ public class Main extends Application {
 						for (int i = 0; i < holder; i++) {
 							if (edges.get(i).edge1.numText.equals(numText)
 									|| edges.get(i).edge2.numText.equals(numText)) {
+								edges.get(i).line.setStrokeWidth(0);
 								edges.remove(edges.get(i));
 								i--;
 								holder--;
@@ -603,6 +615,7 @@ public class Main extends Application {
 							for (int i = 0; i < edges.size(); i++) {
 								if ((edges.get(i).edge1.numVar == edgeOne.numVar
 										&& edges.get(i).edge2.numVar == edgeTwo.numVar)) {
+									edges.get(i).line.setStrokeWidth(0);
 									edges.remove(i);
 									controller.removeEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1);
 									break;
@@ -663,6 +676,7 @@ public class Main extends Application {
 						for (int i = 0; i < holder; i++) {
 							if (edges.get(i).edge1.numText.equals(numText)
 									|| edges.get(i).edge2.numText.equals(numText)) {
+								edges.get(i).line.setStrokeWidth(0);
 								edges.remove(edges.get(i));
 								i--;
 								holder--;
@@ -721,6 +735,7 @@ public class Main extends Application {
 								if ((edges.get(i).edge1.numVar == edgeOne.numVar
 										&& edges.get(i).edge2.numVar == edgeTwo.numVar)) {
 									controller.removeEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1);
+									edges.get(i).line.setStrokeWidth(0);
 									edges.remove(i);
 									break;
 								}
@@ -777,12 +792,13 @@ public class Main extends Application {
 		Line line = new Line();
 
 		public EdgeLine(CircleNode firstEdge, CircleNode secondEdge) {
-			line.setStrokeWidth(3);
+			line.setStrokeWidth(1);
+
 //
 //			setTranslateX(mouseX - 152);
 //			setTranslateY(mouseY - 30);
-			line.setTranslateX(firstEdge.circle.getLayoutX() * 1.5 + firstEdge.getTranslateX());
-			line.setTranslateY(firstEdge.circle.getLayoutY() + firstEdge.getTranslateY());
+			line.setTranslateX(firstEdge.circle.getTranslateX());
+			line.setTranslateY(firstEdge.circle.getTranslateY());
 			edge1 = firstEdge;
 			edge2 = secondEdge;
 			controller.addEdge(edge1.numVar + 1, edge2.numVar + 1, 5);
@@ -792,14 +808,14 @@ public class Main extends Application {
 //			line.setEndX(edge2.getTranslateX());
 //			line.setEndY(edge2.getTranslateY());
 
-			line.setStartX(firstEdge.getTranslateX() + 152);
-			line.setStartY(firstEdge.getTranslateY() + 30);
-			line.setEndX(secondEdge.getTranslateX() + 152);
-			line.setEndY(secondEdge.getTranslateY() + 30);
+			line.setStartX(firstEdge.getTranslateX() + 32);
+			line.setStartY(firstEdge.getTranslateY() + 32);
+			line.setEndX(secondEdge.getTranslateX() + 32);
+			line.setEndY(secondEdge.getTranslateY() + 32);
 			line.setFill(Color.BLACK);
 
 			getChildren().addAll(line);
-			root.add(line, 0, 0);
+			root.getChildren().add(line);
 //			root.getChildren().add(this);
 
 		}
