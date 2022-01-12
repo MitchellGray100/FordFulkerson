@@ -405,19 +405,12 @@ public class Main extends Application {
 		collision(maxFlowButton);
 		collision(information);
 
-		checkEdges();
 	}
 
 	private void removeSelectedNodes() {
 		for (int i = 0; i < nodes.size(); i++) {
 			nodes.get(i).getStyleClass().remove("selectedNode");
 		}
-
-	}
-
-	private void checkEdges() {
-		// TODO Auto-generated method stub
-		// Deletes edge line that are old
 
 	}
 
