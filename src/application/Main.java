@@ -567,6 +567,7 @@ public class Main extends Application {
 							if (edges.get(i).edge1.numText.equals(numText)
 									|| edges.get(i).edge2.numText.equals(numText)) {
 								edges.get(i).line.setStrokeWidth(0);
+								edges.get(i).path.setStrokeWidth(0);
 								edges.remove(edges.get(i));
 								i--;
 								holder--;
@@ -626,6 +627,7 @@ public class Main extends Application {
 								if ((edges.get(i).edge1.numVar == edgeOne.numVar
 										&& edges.get(i).edge2.numVar == edgeTwo.numVar)) {
 									edges.get(i).line.setStrokeWidth(0);
+									edges.get(i).path.setStrokeWidth(0);
 									edges.remove(i);
 									controller.removeEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1);
 									break;
@@ -692,6 +694,7 @@ public class Main extends Application {
 							if (edges.get(i).edge1.numText.equals(numText)
 									|| edges.get(i).edge2.numText.equals(numText)) {
 								edges.get(i).line.setStrokeWidth(0);
+								edges.get(i).path.setStrokeWidth(0);
 								edges.remove(edges.get(i));
 								i--;
 								holder--;
@@ -751,6 +754,7 @@ public class Main extends Application {
 										&& edges.get(i).edge2.numVar == edgeTwo.numVar)) {
 									controller.removeEdge(edgeOne.numVar + 1, edgeTwo.numVar + 1);
 									edges.get(i).line.setStrokeWidth(0);
+									edges.get(i).path.setStrokeWidth(0);
 									edges.remove(i);
 									break;
 								}
