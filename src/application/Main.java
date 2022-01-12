@@ -896,6 +896,8 @@ public class Main extends Application {
 		TextField input = new TextField();
 
 		public EdgeLine(CircleNode firstEdge, CircleNode secondEdge) {
+			edge1 = firstEdge;
+			edge2 = secondEdge;
 			UnaryOperator<Change> filter = change -> {
 				String text = change.getText();
 
@@ -923,8 +925,6 @@ public class Main extends Application {
 
 //			setTranslateX(mouseX - 152);
 //			setTranslateY(mouseY - 30);
-			edge1 = firstEdge;
-			edge2 = secondEdge;
 			controller.addEdge(edge1.numVar + 1, edge2.numVar + 1, 0);
 
 //			line.setStartX(edge1.getTranslateX());
